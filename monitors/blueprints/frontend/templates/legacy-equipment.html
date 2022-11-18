@@ -1,0 +1,96 @@
+<#assign hst=JspTaglibs["http://www.hippoecm.org/jsp/hst/core"]/>
+<@hst.defineObjects />
+<#-- Intended for public monitor display -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <#if pageRefresh??>
+      <meta http-equiv="refresh" content="${pageRefresh}"/>
+    </#if>
+    
+    <link rel="stylesheet" media="screen" href="<@hst.webfile path="/public-common/css/monitor.css"/>" type="text/css" />
+    <link rel="stylesheet" media="screen" href="<@hst.webfile path="/public-common/css/home.css"/>" type="text/css" />
+
+    <@hst.headContributions categoryExcludes="scripts" xhtml=true/>
+  </head>
+<body>
+
+<#assign documentName=hstRequestContext.getAttribute("documentName")!"">
+<#assign hideDocumentName=hstRequestContext.getAttribute("hideDocumentName")!false>
+<#if documentName?length gt 0>
+  <#if !hideDocumentName>
+    <h1>${documentName}</h1>
+  <#else>
+    <h1 class="text-hidden">${documentName}</h1>
+  </#if> 
+</#if>
+
+<#if (successfulRetrieval)>
+  <#-- This include supplies most of the table rows -->
+  <#include "../includes/equipment-availability-includes.ftl" />
+  <#assign lastUpdateDisplay = lastUpdate?string["h:mm:ss a"] + " on " + lastUpdate?string["MMMM dd, yyyy"]>
+
+<p id="availability-timestamp">Availability as of ${lastUpdateDisplay}</p>
+<#-- Outer table -->
+<table style="width: 100%; border-style:none;" cellpadding="15">
+  <tbody>
+    <tr class="no-border">
+      <td width="83%">
+
+        <#-- Inner table -->
+        <table id="equipment-availability-table" class="no-border">
+          <tbody>
+            <tr class="no-border">
+              <th width="60%">Type</th>
+              <th width="20%">Available</th>
+              <th width="20%">Next Due</th>
+            </tr>
+
+            <#-- Code block handles table rows -->
+            <#assign equipLists = resultsMap?keys>
+            <#assign rowIndex = 0>
+            <#list equipLists as equipList>
+              <#-- Even/Odd determines row background color -->
+              <#if ((rowIndex % 2) == 0)>
+                <#assign rowClass="bg-grey" />
+              <#else>
+                <#assign rowClass="bg-white" />
+              </#if>
+              <#assign equipmentList = resultsMap[equipList]>
+              <#-- Line below provides a macro that generates our table rows -->
+              <@displayEquipmentAvailabilityRows equipmentList=equipmentList rowClass=rowClass />
+              <#assign rowIndex = rowIndex + 1>
+            </#list>
+            <#-- /Code block -->
+         
+          </tbody>
+        </table>
+        <#-- /Inner table -->
+
+      </td>
+      <td width="27%">
+        <p align="center">
+          <#if qrCodeImage??>
+            <@hst.link var="qrCodeImageUrl" hippobean=qrCodeImage />
+            <img height="150px" alt="QR code Equipment availability" width="150px" src="${qrCodeImageUrl}"/>
+          </#if> 
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<#-- /Outer table -->
+
+<p> A complete list of available items can be found on the library website:
+<@hst.link var="equipmentAvailability" path="tlc/equipment-availability" mount=publicMount/>
+<a href="${equipmentAvailability}">https://www.lib.umd.edu/tlc/equipment-availability</a>
+</p>
+<#else>
+  <p class="rest-client-failure-message-monitor">Unable to retrieve Equipment Availability</p>
+</#if>
+</body>
+</html>

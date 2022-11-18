@@ -1,0 +1,33 @@
+@charset "utf-8";
+/* CSS Document */
+
+h1{
+	margin-top: 2px;	 /* removing the top margin gets around an issue where margins can escape from their containing div. The remaining bottom margin will hold it away from any elements that follow. */
+	margin-bottom:15px; 
+	padding-bottom:0;
+	font: 24px/30px  "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;
+	color: #A51913;
+	letter-spacing: narrow;
+	text-align: center;
+}
+.no-border{
+	border-style: none;
+}
+tr {
+    border: 1px solid #333;
+    border-collapse: collapse;
+}
+th, tr, td {
+    padding: 10px 15px;
+}
+th {
+	text-align:left;
+}
+table {
+	width:100%;
+	border-collapse: collapse;
+}	
+.bg-dark{
+	background: #555;
+	color: #fff;
+}

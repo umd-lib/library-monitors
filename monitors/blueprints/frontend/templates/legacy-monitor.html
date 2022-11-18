@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <meta http-equiv="refresh" content="60"/>
+    
+    <link rel="stylesheet" media="screen" href="{{ url_for('displays.static', filename='css/legacy-monitor.css') }}" type="text/css" />
+    <link rel="stylesheet" media="screen" href="{{ url_for('displays.static', filename='css/legacy-home.css') }}" type="text/css" />
+  </head>
+<body>
+<h1>Where Can I Find a Computer?</h1>
+<p id="availability-timestamp">Availability as of {{ last_updated }}</p>
+<table style="width: 100%; border: 1px dotted rgb(0, 0, 0); border-collapse: collapse;" cellpadding="5">
+  <tbody>
+    <tr>
+      <td width="83%">
+        <div>
+          <h2 style="margin: 0px; padding: 0px 0px 0px 5px">{{ library_name }} Library</h2>
+          <table id="workstation-availability-table" data-mode="reflow" data-role="table" class="htmtableborders" style="width: 100%; display: table; background-image: none; border-collapse: separate; float: none; border-style: none;">
+            <tbody>
+              <tr>
+                <th>
+                <th>Available Computers</th>
+                <th>Total Computers</th>
+              </tr>
+              
+              {% set row_index = 0 %}
+              {% for key, result in availability_results.items() %}
+                {% set location_key = result.key %}
+                {% if (row_index % 2) == 1 %}
+                  <tr>
+                {% else %}
+                  <tr class=bg-grey>
+                {% endif %}
+                  <td>{{ library_name}} Library {{ result.name }}</td>
+                  <td>
+                    {% if result.available > 0 %}
+                      {{ result.available }}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if result.total > 0 %}
+                      {{ result.total }}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
+                </tr>
+                {% set row_index = row_index + 1 %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

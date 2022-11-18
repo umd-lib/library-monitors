@@ -1,0 +1,1181 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* ~~ Element/tag selectors ~~ */
+ ul,  dl { /* Due to variations between browsers, it's best practices to zero padding and margin on lists.
+  For consistency, you can either specify the amounts you want here, or on the list items (LI, DT, DD) they contain.
+  Remember that what you do here will cascade to the .nav list unless you write a more specific selector. */
+	padding: 0;
+	margin:0;
+	list-style-type: none;
+}
+
+
+h1{
+	margin-top: 2px;	 /* removing the top margin gets around an issue where margins can escape from their containing div. The remaining bottom margin will hold it away from any elements that follow. */
+	margin-bottom:15px;
+	padding-bottom:0;
+	font: 24px/30px  "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;
+	color: #A51913;
+	letter-spacing: narrow;
+}
+
+h2{
+	margin-top: 3px;	 /* removing the top margin gets around an issue where margins can escape from their containing div. The remaining bottom margin will hold it away from any elements that follow. */
+	margin-bottom:15px;
+	padding-bottom:0;
+	color: #A51913;
+	letter-spacing: narrow;
+
+	font: 18px/24px "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;
+}
+
+h3 {
+	margin: 5px 0;	 /* removing the top margin gets around an issue where margins can escape from their containing div. The remaining bottom margin will hold it away from any elements that follow. */
+/* 	padding-right: 10px;
+	padding-left: 5px; adding the padding to the sides of the elements within the divs, instead of the divs themselves, gets rid of any box model math.
+						A nested div with side padding can also be used as an alternate method. */
+	color:#A51913;
+	font: 16px/22px "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;
+}
+h4 {
+	color:#A51913;
+	margin: 5px 0;
+	padding: 0;
+	font: 14px/20px "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;
+}
+h5 {
+	color:#A51913;
+	margin: 5px 0;
+	font: 12px/18px "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;
+}
+body{
+    font: 80%/1.4 Verdana,Arial,Helvetica,sans-serif;
+}
+
+pre {
+    margin: 2px;
+    font: inherit;
+}
+fieldset{
+    border:none;
+    padding:3px 0;
+}
+
+.big{
+	font-size:115%
+}
+
+.font-gray{
+    color:#a4a4a4;
+}
+
+.selected{
+    color:#A51913;
+    font-weight: bold;
+}
+
+hr {
+	color:#999;
+}
+
+table, tr, td{
+	vertical-align: top;
+	border-collapse: collapse;
+	border-color: #c3c3c3;
+	padding: 4px 5px;
+}
+
+table .directory {
+    margin:  5px;
+}
+
+table p {
+    display:inline;
+}
+
+.bg-grey {
+    background-color:#EEE;
+}
+
+.red{
+	color:#A51913;
+/*	border-left: #CCC 1px solid;
+	border-right: #CCC 1px solid;*/
+	border-bottom: #CCC 1px solid;
+	border-radius: 0 8px 8px  0;
+	margin:  0 20px 15px 5px;
+	cursor:default;
+}
+
+.red a:hover, a:active, a:focus {
+    text-decoration: none;
+}
+
+a img { /* this selector removes the default blue border displayed in some browsers around an image when it is surrounded by a link */
+	border: none;
+}
+
+/* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */
+a:link {
+	color:#006699;
+	text-decoration: none; /* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification */
+}
+a:visited {
+	color: #006699;
+	text-decoration: none;
+}
+a:hover, a:active, a:focus { /* this group of selectors will give a keyboard navigator the same hover experience as the person using a mouse. */
+	text-decoration: underline;
+}
+
+/* ~~ this container surrounds all other divs giving them their percentage-based width ~~ */
+
+.container {
+	clear: both;
+	max-width: 962px;/* a max-width may be desirable to keep this layout from getting too wide on a large monitor. This keeps line length more readable. */
+	min-width: 962px;/* a min-width may be desirable to keep this layout from getting too narrow. This keeps line length more readable in the side columns. */
+	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout. It is not needed if you set the .container's width to 100%. */
+    border-left: 10px #EEE solid;
+    border-right:10px #EEE solid;
+    border-bottom:5px #EEE solid;
+    background-color:#AAA;
+}
+
+#main {
+    margin:0;
+    padding:0;
+    width:960px;
+    min-height:400px;
+    height:100%;
+}
+
+/* ~~         Libraries header, and three buttons --         */
+
+.lib-header {
+	background-color: #FFF;
+	width:960px;
+	height:37px;
+	color:#000;
+}
+
+.header-item-left{
+	float:left;
+	padding-top:5px; padding-bottom:5px; padding-left:5px;
+}
+
+.header-item-right{  /* hours, my account, askus buttons  */
+	float:right;
+	padding-top:7px; padding-bottom:5px; padding-right:3px;
+}
+
+/* -- Todays hours section --*/
+#header-image {
+	width:960px;
+	height:155px;
+	margin-bottom:1px;
+}
+
+
+.rdm-images{ /* image randomly displayed  --   */
+	padding:0;
+	margin:0;
+	width: 960px;
+	height:155px;
+}
+.hours-lib{
+	float: right;
+	margin:0;
+	color:#fff;
+	font: 73%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	padding-right:10px;
+	padding-top:1px;
+	width:400px;
+}
+.hours-today {  /* Today's hours heading - light yellow color*/
+	color:#FF9;
+	padding:4px 20px;
+	text-align:right;
+}
+.hours-entry{
+    float:right;
+}
+.hours-branch {
+	float:left;
+	text-align:right;
+	padding-right:8px;
+	width:200px;
+}
+
+.hours-list {
+	float:left;
+	text-align:left;
+	width:115px;
+}
+
+/* Todays Hours in Header can contain html from public:hours_summary  */
+/* The html is automatically wrapped in p so negate the block display */
+.hours-list > p {
+    display: inline;
+}
+
+.hours-lib a:link {
+	color:#ffffff;
+	text-decoration: underline;
+}
+.hours-lib a:visited {
+	color: #ffffff;
+	text-decoration: none;
+}
+.hours-lib a:hover, a:active, a:focus {
+	text-decoration: none;
+	color: #ffffff;
+}
+
+.menubar {  /*-- drop down menu background iamge  -- */
+	background-image:url(../images/bg-dropdownmn.png);
+	width:960px;
+	height:25px;
+	border-top: 1px solid #fff;
+}
+
+/* ~~ News & Events Section starts here ~~  */
+.sidebar {
+	float: right;
+	width: 326px;
+	padding: 2px 4px 5px 4px ;
+	border-left: 1px solid #BBB;
+	background-color:#fff;
+	box-shadow: 0 0 1px #BBB;
+/*	border-left: 1px solid #999;*/
+
+}
+
+.slides-box {
+	width:308px;
+	height:242px;
+	margin: 1px;
+	padding: 4px 2px 0 8px;
+	border: 1px solid #BBB;
+	background-color:#EEE;
+	box-shadow: 0 0 1px #DDD;
+
+}
+
+#slider {
+	width: 310px;
+	height: 234px;
+	list-style: none;
+	/* Prevent FOUC (see FAQ page) and keep things readable if javascript is disabled */
+	overflow-y: auto;
+	overflow-x: hidden;
+	font-size: 11px;
+}
+
+
+/* Slideshow for subsite */
+.slides-boxubsite {
+	width:520px;
+	height:315px;
+	padding: 0;
+	margin-bottom:20px;
+}
+
+#slidersubsite {
+	width: 520px;
+	height: 305px;
+	list-style: none;
+	padding:0;
+	margin: 0;
+	/* Prevent FOUC (see FAQ page) and keep things readable if javascript is disabled */
+	overflow-y: auto;
+	overflow-x: hidden;
+	font-size: 11px;
+	align: center;
+}
+.slide-image img{ /*Add grey border mainly for images with lighter/off white color edges. For subsite*/
+    width:518px;
+    height: 270px;
+    border: 1px solid #BBB;
+}
+
+.news-events{
+	font: 130%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	color:#900000;
+	font-weight: 500;
+	padding: 1px 3px 2px 10px;
+	text-align:left;
+	margin: 12px 2px 2px 2px;
+}
+
+.headline-box{
+	margin-top:3px;
+	font-size: 11px;
+	border-bottom: dotted thin #999999;
+	display:block;
+	height:80px;
+	padding:2px 5px 2px 5px;
+	width:320px;
+}
+
+.newsicon {
+    float: left;
+    width: 80px;
+}
+.headline{
+	padding-top:5px;
+	padding-right:4px;
+	float: right;
+	width: 235px;
+}
+
+.right-sidebar .newsicon {
+    float: left;
+    width: 60px;
+}
+
+.content1 {  /* ~~ used on home page content area only, subsites use #Content in style.css ~~ */
+	padding: 10px 0;
+	width: 65%;
+	float: right;
+	alignment-adjust:left;
+}
+.border {
+    background-color: white;
+    border: 1px solid #999;
+    padding: 2px;
+	margin:5px 5px 2px 2px;
+}
+
+/* ~~ This grouped selector gives the lists in the .content area space ~~ */
+.content1 ul, .content1 ol {
+	padding: 0 15px 15px 40px; /* this padding mirrors the right padding in the headings and paragraph rule above. Padding was placed on the bottom for space between other elements on the
+s and on the left to create the indention. These may be adjusted as you wish. */
+}
+
+/*~~ search area ~~ */
+.searchall {
+	width:590px;
+	padding: 0 20px 15px 0px;
+	margin: 0 5px 0 5px;
+/*	background-color: #A51913;
+	background-image: url("images/sidebar-bg1.jpg");
+	border-radius: 3px;
+	border: 1px solid #e3e3e3; */
+}
+
+.searchall.search-subsite {
+	width:520px;
+	padding: 0 0 15px 0px;
+	margin: 0;
+}
+.searchbox {
+    width: 510px;
+    padding: 10px;
+    margin: 0 10px 10px 0;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+}
+
+.search-scope{
+    margin:8px 10px 10px 0;
+}
+
+.search-small {
+    width: 500px;
+    padding: 10px;
+    margin: 0 10px 10px 0;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+}
+
+.lists-box{
+    width:620px;
+    margin: 5px 15px;
+}
+
+/* ~~ List items under search area, change width to 150px for 4 columns ~~ */
+.lists{
+	margin: 0 5px 0 1px;
+	padding: 0 5px;
+	float:left;
+	background: url("../images/list-bg.jpg") repeat-y;
+	width: 185px;
+	min-height:315px;
+	border-left:1px solid #CCC;
+}
+
+.lists p{
+	text-align:left;
+	font-size: 11px;
+	font: 85%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	padding-bottom:8px;
+	padding-left:5px;
+
+}
+
+.lists h3, .lists h4{
+	text-align:left;
+	margin-bottom: 20px;
+}
+/* ~~ The navigation list styles (can be removed if you choose to use a premade flyout menu like Spry) ~~ */
+ul.nav {
+	list-style: none; /* this removes the list marker */
+	border-top: 1px solid #666; /* this creates the top border for the links - all others are placed using a bottom border on the LI */
+	margin-bottom: 15px; /* this creates the space between the navigation on the content below */
+}
+ul.nav li {
+	border-bottom: 1px solid #666; /* this creates the button separation */
+}
+ul.nav a, ul.nav a:visited { /* grouping these selectors makes sure that your links retain their button look even after being visited */
+	padding: 5px 5px 5px 15px;
+	display: block; /* this gives the link block properties causing it to fill the whole LI containing it. This causes the entire area to react to a mouse click. */
+	text-decoration: none;
+	background: #8090AB;
+	color: #000;
+}
+ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background and text color for both mouse and keyboard navigators */
+	background: #6F7D94;
+	color: #FFF;
+}
+
+/* ~~ The footer ~~ */
+.footer {
+	padding: 5px;
+	border: 1px solid #aaa;
+	background-image:url(../images/wrapper/footer-bg.png);
+	background-color: #ffffff;
+	/*position: relative;/* this gives IE6 hasLayout to properly clear */
+	clear: both; /* this clear property forces the .container to understand where the columns end and contain them */
+	font: 80%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	height:90px;
+
+
+}
+
+.footer-left {
+	float:left;
+	padding:0 ;
+
+}
+
+.footer-right {
+	float:right;
+	padding: 0 5px;
+	text-align: right;
+}
+
+/* ~~ miscellaneous float/clear classes ~~ */
+.fltrt {  /* this class can be used to float an element right in your page. The floated element must precede the element it should be next to on the page. */
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { /* this class can be used to float an element left in your page. The floated element must precede the element it should be next to on the page. */
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { /* this class can be placed on a <br /> or empty div as the final element following the last floated div (within the #container) if the #footer is removed or taken out of the #container */
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+
+
+
+#site-container1 {
+		margin: 0px auto 0;
+		font-size: 1em;
+		width: 960px;
+	}
+
+
+#header-container1 {
+		color: #fff;
+		position: relative;
+		line-height: 15px;
+	margin:0px 0px 0px 0px;
+	background-color:#000;
+	background-repeat: repeat-x;
+	background-position: top left;
+	width:960px;
+	height:192px;
+
+	}
+
+#header-container1.noheader{
+  height: auto;
+}
+#header-image.noheader {
+	display: none;
+	height: 0;
+}
+
+#body-container1 {
+    color:Black;
+	position: relative;
+	margin:0 auto;
+	width: 960px;
+	height:100%;
+	overflow:hidden;
+	background-color: #FFF;
+	background-repeat:repeat-y;
+    min-height: 400px;
+}
+/*
+	#body-container-padding1 {
+	padding: 5px 10px 20px 20px;
+	}
+*/
+
+.subsite-footer {
+	padding-top: 10px;
+	/*position: relative;/* this gives IE6 hasLayout to properly clear */
+	font: 87%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	margin: 8px 0;
+
+}
+
+.subsite-footer hr {
+	width: 45%;
+	text-align: left;
+	margin-left: 0px;
+}
+/*
+This negates the effects of the p tag inside of the subsite footer
+*/
+.subsite-footer p {
+	display:inline;
+}
+
+#content { /* for 3 columns. */
+  float:left;
+  width:535px;
+  padding: 5px 15px;
+  margin-bottom: 5px;
+/*  border: 1px solid #666;
+  box-shadow: 3px 3px 2px #ccc;
+  margin: 1px 5px 5px 2px; */
+ /* background:url(../images/bg-center-grey.png) repeat-x scroll 0 0 transparent;*/
+  overflow-x: hidden;
+  border-right: 1px solid #ccc;
+
+
+}
+
+.content-title {
+	font:160%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	margin-top: 10px;	 /* removing the top margin gets around an issue where margins can escape from their containing div. The remaining bottom margin will hold it away from any elements that follow. */
+	padding-right: 15px;
+	padding-left: 5px;
+	padding-bottom:10px;
+	color:#800;
+
+}
+
+#content-wide { /* for two columns */
+	float:left;
+	width:720px;
+	padding: 5px 15px;
+}
+
+#content-single { /* for 1 column. */
+  width: 940px;
+  padding: 0 8px;
+  margin: 0 auto;
+}
+
+#content-narrow { /* for 1 column like search result page. */
+  width:880px;
+  padding: 10px 10px;
+  margin: 15px auto;
+  border: 2px #F1F1F1 solid;
+}
+
+#leftmenu {
+	float: left;
+	width: 196px;
+	text-align:left;
+	font-size: 95%;
+/* 	background: #eee; */
+}
+
+#left-heading {
+    border-top: 1px #960000 solid;
+    border-bottom: 1px #960000 double;
+    border-right: 1px #960000 solid;
+    box-shadow: 2px 3px 7px #bbb;
+    border-radius: 5px 5px 0 0;
+	margin: 10px 5px 0 2px; /* this creates the space between the navigation on the content below */
+	padding: 4px 8px 3px 15px;
+	background: url("../images/bg-list-dark.png") repeat-y;
+	font-weight: bold;
+	text-align: center;
+}
+
+.gis-container {
+    border:1px solid #AAA;
+    padding: 1px;
+    border-radius: 4px;
+}
+
+.gis-home-heading {
+    display:block;
+    color:#FFF;
+    background-color:#A51913;
+    margin: 3px 0;
+    padding: 3px;
+    font: 18px/24px "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;
+}
+
+.gis-home-heading a:link, .gis-home-heading a:hover,
+.gis-home-heading a:active,.gis-home-heading a:visited, .gis-home-heading a:focus {
+	text-decoration: none;
+	color: #FFF;
+}
+
+.singleline {   /* for left heading with one line for mdmaps, GIS mostly. */
+    font-size:100%;
+}
+
+.doubleline {   /* for left heading with more than one line for mdmaps, GIS mostly. */
+    font-size:90%;
+}
+
+.left-column-wide { /* for left columns without the right panel. Created for gis home page, can be used for others as well*/
+    width:440px;
+    float:left;
+}
+.right-column { /* for gis-facetsearch, can be used by other clomuns in the future */
+    width:230px;
+    float:right;
+    padding: 8px 10px 5px 3px;
+    }
+
+ul.nav-left {
+ 	list-style-image: url(../images/redarrow.gif);
+/* this creates the top border for the links - all others are placed using a bottom border on the LI */
+	border-right: 1px  #960000 solid;
+  	border-bottom: 1px #960000 solid;
+  /*  box-shadow:2px 3px 7px #bbb; */
+    border-radius:0 0 5px 5px;
+	margin: 0 5px 5px 2px; /* this creates the space between the navigation on the content below */
+	padding: 1px 8px 15px 20px;
+	background: url("../images/list-bg.jpg") repeat-y;
+
+}
+
+.left-body {
+	background: url("../images/list-bg.jpg") repeat-y;
+	overflow-x: hidden;
+/*	border-right: 1px  #ccc solid;
+	box-shadow: 2px 3px 7px #bbb; */
+	margin: 0 7px 8px 2px; /* this creates the space between the navigation on the content below */
+	padding: 5px 10px 6px 7px;
+}
+ul.nav-left li {
+	border-bottom: 1px dashed #ccc; /* this creates the button separation */
+	padding: 2px 0;
+}
+ul.nav-left li.last {
+	border-bottom: none;
+}
+ul.nav-left a, ul.nav-left a:visited { /* grouping these selectors makes sure that your links retain their button look even after being visited */
+	padding: 2px 0;
+	/* display: block; this gives the link block properties causing it to fill the whole LI containing it. This causes the entire area to react to a mouse click. */
+	text-decoration: none;
+}
+ul.nav-left a:hover, ul.nav-left a:active, ul.nav-left a:focus { /* this changes the background and text color for both mouse and keyboard navigators */
+	text-decoration: underline;
+	color:#999;
+}
+
+ul.submenu-item {
+	list-style-image: url(../images/redarrow.gif);
+	margin:0;
+	padding:0 0 0 20px;
+}
+ul.submenu-item li{
+	border:0;
+	padding:2px 0;
+}
+
+ul.subsubmenu-item {
+    list-style-image: url(../images/reddash.gif);
+    list-style-type: none;
+	margin:0;
+	padding:0 0 0 5px;
+}
+ul.subsubmenu-item li{
+	border:0;
+	padding:1px 0;
+	background-color: #EEE;
+}
+
+.right-sidebar ul, dl, .left-body ul, dl{
+    list-style-type: circle;
+    padding: 2px 3px 5px 10px;
+    margin: 0;
+}
+
+.right-sidebar ol, .left-body ol {
+    padding: 2px 5px 5px 20px;
+    margin: 0;
+}
+
+
+.content-container { /* push down subsite footer */
+	min-height: 400px;
+}
+
+.content-body {
+    overflow: hidden;
+}
+.content-body ul,  dl { /* Due to variations between browsers, it's best practices to zero padding and margin on lists.
+  For consistency, you can either specify the amounts you want here, or on the list items (LI, DT, DD) they contain.
+  Remember that what you do here will cascade to the .nav list unless you write a more specific selector. */
+	padding: 3px 10px 3px 30px ;
+ 	list-style-image: url(../images/redsquare.gif);
+}
+
+.content-body li{
+    padding: 2px 0;
+}
+
+.right-sidebar {
+	padding: 0 2px 5px 0;
+	width: 192px;
+	height: 100%;
+	float: left;
+	margin: 0;
+/* 	border-left: #aaa  solid 1px; */
+	border-radius: 5px 0 5px 0;;
+	background: url("../images/list-bg.jpg") repeat-y;
+	font-size: 95%;
+	overflow-x: hidden;
+}
+
+.right-link {
+	padding: 2px 5px;
+	margin:2px 1px 4px 2px;
+	overflow-x: hidden;
+}
+.right-body {
+	padding: 2px 5px;
+	margin:2px;
+	overflow-x: hidden;
+}
+
+/* Newsroom rightside and blog share this class. */
+#right-blog {
+	padding: 2px 5px;
+	margin: 2px;
+}
+
+#right-blog ul {
+    padding:2px 0;
+}
+
+#right-blog li, #right-blog ol {
+    padding: 4px 0;
+    border-bottom: 1px #BBB dashed;
+    list-style:none;
+}
+
+#right-blog li.last {
+	border-bottom: none;
+}
+
+#right-blog span.date {
+    color: grey;
+    font-size:85%;
+}
+
+#right-blog span.teaser {
+	font-size:85%;
+}
+
+/* mdmap styles goes here mdmap  mdmap mdmap  */
+
+#mdmap-heading{
+    float:left;
+    width:62%;
+    margin:0 5px 0 0;
+}
+#mdmap-search{
+    float:left;
+    width:35%;
+    text-align:right;
+    padding-top:7px;
+}
+
+/* Blue buttons are actually red. It started blue, but changed to red later.
+Didn't change name since we have to change several places, including in Hippocms files user creates */
+
+#mdmap-blue-button{
+    width: 150px;
+    margin:5px 30px;
+    text-align:center;
+}
+
+
+#nav-language {
+	height: 16px;
+	background: url("../images/list-bg.jpg");
+	float: right;
+	padding: 0 7px 1px 7px;
+	margin: 2px 4px 1px 4px;
+	border: solid #000 1px;
+	border-radius: 5px;
+	box-shadow:2px 2px 2px #8B8B8B;
+    /* 	color: #000; */
+}
+
+#nav-language a {
+    color:#3B3B3B;
+}
+
+/* blog */
+li.blog.item {
+  border-bottom: 1px solid rgb(204, 204, 204);
+  padding-top: 10px;
+}
+
+/* pagination */
+.pagination {
+	float: right;
+	margin:10px 0;
+	max-width:520px;
+}
+
+.record-select{
+	float: right;
+	width: 150px;
+}
+
+.pages{
+	float: right;
+	max-width:370px;
+	padding-top: 0;
+}
+
+ul#page-nav {
+  list-style: none;
+  font-size: 90%;
+}
+
+ul#page-nav li {
+  float:left;
+  padding: 0px 3px;
+  display: inline-block;
+}
+
+ul#page-nav li.prev.disabled{
+  color: #666;
+}
+ul#page-nav li.next.disabled{
+  color: #666;
+}
+/* Facet Navigation */
+
+div#facetnavigation {
+  padding-left: 0px;
+}
+
+ul.filter-by {
+  padding-left: 0px;
+}
+
+li.filter-by {
+  list-style-type: none;
+  padding-top: .5em;
+}
+
+ul.filter-by-value {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 1em;
+  text-indent: -1em;
+}
+
+li.filter-by-value {
+  font-size: 90%;
+}
+
+li.filter-by-value:before {
+  content: "\203A \0020";
+}
+
+.filter.remove {
+  border: 1px solid #ccc;
+  border-radius:5px;
+  margin: 0 2px;
+  padding: 0 5px;
+  text-decoration: none;
+}
+
+.rss-main hr{
+  color: #D4D4D4;
+  align: left;
+  width: 95%;
+  height:1px;
+  border:0 none;
+  background-color: #D4D4D4;
+}
+
+.rss-main {
+  font: 90%/1.4 Verdana,Arial,Helvetica,sans-serif;
+}
+
+/* .rss-main ul {
+  padding: 3px 5px 3px 15px;
+} */
+
+.rss-author {
+  font-style:italic;
+  color: #000;
+}
+
+.rss-pubDate {
+  color: #960000;
+}
+
+.rss-description{
+  font-style: normal;
+  color:#000;
+}
+
+.new-item {
+  font-color: red;
+}
+
+.nav-buttons{
+  float: right;
+  text-decoration: none;
+}
+
+.nav-buttons>a:link{
+  text-decoration: none;
+}
+
+#hours-display {
+  margin: 10px 0;
+  border:1px #c3c3c3 solid;
+  font-size:87%;
+  width: 100%;
+}
+
+.hours-branch>p{
+  display: inline;
+}
+.branch-title {
+  font-weight:normal;
+  padding: 10px 3px;
+  border: 1px solid #c3c3c3;
+  text-align:left;
+}
+
+.hours-day {
+  width: 115px;
+  text-align: left;
+  padding: 10px 3px;
+  border: 1px solid #c3c3c3;
+}
+
+.hours-day p {
+  display:block;
+  margin: 0 0 4px 0;
+
+}
+
+.today {
+  background-color: #fefde8;
+}
+
+.next-month, .prev-month {
+  color: #aaa;
+}
+
+.row-even {
+  background-color:#f8f8f4;
+}
+
+.row-odd {
+  background-color:#ebebe6;
+}
+
+#date-range-week {
+  display:inline;
+  padding-left:150px;
+}
+
+#date-range-month {
+  display:inline;
+  padding-left:200px;
+}
+
+#askus-floating {
+background: none repeat scroll 0 0 #FFFFFF;
+border-bottom-right-radius: 5px;
+border-top-right-radius: 5px;
+display: block;
+float: right;
+margin: 185px 0 0 970px;
+padding: 0;
+position: fixed;
+text-align: center;
+width: 28px;
+z-index: 999;
+top: 10%;
+}
+
+#directory-list{
+  border: none;
+}
+#directory-list>tbody>tr>td{
+  padding: 3px 1px;
+  text-align: left;
+  vertical-align: center;
+}
+.wide #directory-list>tbody>tr>td{
+  padding: 22px 1px;
+  text-align: left;
+  vertical-align: center;
+}
+tr.border-under{
+  border-bottom:1px solid #ccc;
+}
+#directory-list>caption, #directory-list>thead{
+  display: none;
+}
+
+#directory-detail>caption{
+  display: none;
+}
+#directory-detail>tbody>tr>th{
+  font-weight: normal;
+  text-align: left;
+  vertical-align: top;
+  padding: 4px 5px;
+  border-bottom:1px solid #ccc;
+}
+#directory-detail>tbody>tr>td{
+  border-bottom:1px solid #ccc;
+}
+#directory-specialists{
+  border:none;
+  width:100%;
+}
+
+#directory-specialists>thead>tr>th{
+  padding: 10px 5px;
+  text-align: left;
+  border-bottom: 1px solid #AAA;
+}
+.specialist-note {
+  font-size: 80%;
+  margin-left: 5px;
+}
+
+.department_name{
+  padding-top: 1em;
+}
+.nameCol{
+  width: 170px;
+}
+.joblocationCol{
+  width: 270px;
+}
+.phoneidCol{
+  width: 116px;
+}
+.directory-name{
+  font-weight: normal;
+  text-align: left;
+  vertical-align: center;
+  padding: 3px 1px;
+}
+#directory-search{
+    float:right;
+    width:178px;
+    text-align:right;
+
+}
+.padding-top{
+    padding-top:25px;
+}
+#a2z{
+  list-style: none;
+  margin-left: 0;
+  text-align: left;
+  padding: 0;
+}
+#a2z>li{
+  display: inline-block;
+  text-indent: -0.2em;
+}
+#a2z>li:first-of-type{
+  text-indent: 0;
+}
+#a2z>li:after{
+  content: "|";
+  margin: 0;
+  padding-left: .1em;
+}
+#a2z>li:last-of-type:after{
+  content: "";
+}
+
+/* database finder, dbfinder styles */
+#db-results {
+  border-top: 1px solid #ccc;
+  margin: 15px 15px 0 0;
+  padding: 10px 5px 10px 0;
+}
+#db-search {
+  max-width:550px;
+  padding:0 0 10px 0;
+  letter-spacing: 2px;
+}
+#db-results ol {
+  margin: 0;
+  padding:0;
+}
+#db-results ol > li {
+  margin: 1px 0;
+  padding: 3px 0;
+  list-style: none outside none;
+  line-height:18px;
+}
+.db-record-detail {
+  display:none;
+  margin-left:15px;
+}
+.db-record-detail p {
+  display:inline;
+}
+
+.db-record-detail ol > li{
+  border-bottom:1px dotted #ccc;
+  padding:2px 0;
+  line-height:18px;
+}
+.db-name{
+  float:left;
+  min-width:130px;
+  display:block;
+  font-weight:bold;
+  color:#555555;
+}
+.db-value{
+  display:block;
+  padding-left:130px;
+}
+.db-error {
+  padding-top: 15px;
+
+}
+#db-page-nav {
+    margin: 10px 0 0 0;
+    float: right;
+}
