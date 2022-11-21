@@ -1,5 +1,5 @@
-import datetime
 import monitors
+import datetime
 
 from flask import Blueprint, render_template, abort
 from jinja2 import TemplateNotFound
@@ -25,8 +25,8 @@ def stem():
         about(404)
 
 
-@displays.route('/mckeldin-legacy')
-def mckeldin_legacy():
+@displays.route('/mckeldin-workstations-legacy')
+def mckeldin_workstations_legacy():
     avail = None
 
     locs = monitors.mck_floors
@@ -44,8 +44,8 @@ def mckeldin_legacy():
         about(404)
 
 
-@displays.route('/stem-legacy')
-def stem_legacy():
+@displays.route('/stem-workstations-legacy')
+def stem_workstations_legacy():
     avail = None
 
     locs = monitors.stem_floors
@@ -57,6 +57,48 @@ def stem_legacy():
     avail_date = current_date.strftime("%I:%M %p on %a, %b %d")
     try:
         return render_template('legacy-monitor.html', last_updated=avail_date,
+                               library_name="STEM",
+                               availability_results=avail)
+    except TemplateNotFound:
+        about(404)
+
+
+@displays.route('/stem-equipment-legacy')
+def stem_equipment_legacy():
+    avail = None
+
+    eq = monitors.stem_equipment
+    equipment = mapi.build_equipment_legacy(eq)
+    if equipment is not None:
+        avail = equipment
+
+    monitors.logger.error(avail)
+    current_date = datetime.datetime.now()
+    avail_date = current_date.strftime("%I:%M %p on %a, %b %d")
+    try:
+        return render_template('legacy-equipment.html',
+                               last_updated=avail_date,
+                               library_name="STEM",
+                               availability_results=avail)
+    except TemplateNotFound:
+        about(404)
+
+
+@displays.route('/mckeldin-equipment-legacy')
+def mckeldin_equipment_legacy():
+    avail = None
+
+    eq = monitors.mck_equipment
+    equipment = mapi.build_equipment_legacy(eq)
+    if equipment is not None:
+        avail = equipment
+
+    monitors.logger.error(avail)
+    current_date = datetime.datetime.now()
+    avail_date = current_date.strftime("%I:%M %p on %a, %b %d")
+    try:
+        return render_template('legacy-equipment.html',
+                               last_updated=avail_date,
                                library_name="STEM",
                                availability_results=avail)
     except TemplateNotFound:

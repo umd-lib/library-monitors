@@ -29,12 +29,8 @@
               
               {% set row_index = 0 %}
               {% for key, result in availability_results.items() %}
+                <tr class="{{ result.class }}">
                 {% set location_key = result.key %}
-                {% if (row_index % 2) == 1 %}
-                  <tr>
-                {% else %}
-                  <tr class=bg-grey>
-                {% endif %}
                   <td>{{ library_name}} Library {{ result.name }}</td>
                   <td>
                     {% if result.available > 0 %}

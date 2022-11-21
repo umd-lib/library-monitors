@@ -1,10 +1,13 @@
 import requests
 import monitors
 import json
+import datetime
+import time
 
 from flask import Blueprint
 from collections import OrderedDict
 from bs4 import BeautifulSoup
+from datetime import date
 
 mapi = Blueprint('mapi', __name__, url_prefix='/api')
 
@@ -75,6 +78,7 @@ def build_workstations_response(locations, reverse_sort):
     json_content = json.loads(response.text)
 
     results = OrderedDict() 
+    html_class = "bg-grey"
     for item in json_content:
         values = {}
         key = item['key']
@@ -99,6 +103,11 @@ def build_workstations_response(locations, reverse_sort):
                 values['name'] = name
                 values['available'] = available
                 values['key'] = key
+                values['class'] = html_class
+                if html_class == 'bg-white':
+                    html_class = 'bg-grey'
+                else:
+                    html_class = 'bg-white'
                 results[key] = values
 
     if reverse_sort:
@@ -158,6 +167,14 @@ def build_equipment_mckeldin(laptops, headphones, chargers, calculators, laptop_
     return result
 
 
+def build_equipment_legacy(equipment):
+    result = []
+    equipment_raw = equipment_request(equipment)
+    monitors.logger.error(equipment_raw)
+    equipment_html = generate_equipment_legacy_response(equipment_raw, "Equipment")
+    return equipment_html
+
+
 def build_equipment_stem(laptops, headphones, chargers, calculators, laptop_chargers):
     result = []
     if laptops is not None:
@@ -199,7 +216,37 @@ def generate_equipment_response(raw_html, label):
 
     available = 0
     total = 0
+    e_type = None
     for td in soup.find_all('td'):
+        if len(td.get('class')) >= 1:
+            td_field = td.get('class')[0]
+            td_value = td.text
+            if td_field == 'available':
+                available = available + int(td_value)
+            if td_field == 'total':
+                total = total + int(td_value)
+            if td_field == 'type':
+                e_type = str(td_value)
+
+    result['label'] = label
+    result['total'] = total
+    result['available'] = available
+
+    return result
+
+
+def generate_equipment_legacy_response(raw_html, label):
+    results = []
+    soup = BeautifulSoup(raw_html, 'html.parser')
+
+    available = 0
+    total = 0
+    e_type = None
+    mindue = None
+    stored_type = None
+    html_class = 'bg-grey'
+    for td in soup.find_all('td'):
+        entry = {}
         td_field = td.get('class')[0]
         td_value = td.text
         # result[td_field] = td_value
@@ -207,9 +254,34 @@ def generate_equipment_response(raw_html, label):
             available = available + int(td_value)
         if td_field == 'total':
             total = total + int(td_value)
+        if td_field == 'type':
+            e_type = str(td_value)
+        if td_field == 'mindue':
+            if td_value is not None and td_value.isnumeric() and available <= 0:
+                mindue = date.fromtimestamp(int(td_value)).strftime("%a, %b %d")
+            elif available > 0:
+                mindue = 'Available Now'
+            else:
+                mindue = 'n/a'
+        if td_field == 'cpdpt':
+            # This is an ugly kludge
+            if stored_type != e_type:
+                entry['label'] = label
+                entry['total'] = total
+                entry['available'] = available
+                entry['title'] = e_type
+                entry['due'] = mindue
+                entry['class'] = html_class
+                results.append(entry)
+                entry = {}
+                stored_type = e_type
+                available = 0
+                total = 0
+                e_type = None
+                mindue = None
+                if html_class is 'bg-white':
+                    html_class = 'bg-grey'
+                else:
+                    html_class = 'bg-white'
 
-    result['label'] = label
-    result['total'] = total
-    result['available'] = available
-
-    return result
+    return results
