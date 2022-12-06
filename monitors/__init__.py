@@ -82,3 +82,23 @@ mck_equipment = prepare_equip(env['EQUIPMENT_MCK'])
 
 app.register_blueprint(displays)
 app.register_blueprint(mapi)
+
+
+@app.route('/')
+def root():
+    return {'status': 'ok'}
+
+
+@app.route('/ping')
+def ping():
+    return {'status': 'ok'}
+
+
+if __name__ == '__main__':
+    # This code is not reached when running "flask run". However the Docker
+    # container runs "python app.py" and host='0.0.0.0' is set to ensure
+    # that flask listens on port 5000 on all interfaces.
+
+    # Run waitress WSGI server
+    serve(TransLogger(app, setup_console_handler=True),
+          host='0.0.0.0', port=5000, threads=10)

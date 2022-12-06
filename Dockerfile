@@ -11,8 +11,8 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt
 
-COPY ./src/app.py /app/app.py
+ENV FLASK_APP "/app/monitors/__init__.py"
 
-ENTRYPOINT [ "python" ]
+COPY ./monitors /app/monitors
 
-CMD [ "app.py" ]
+CMD ["flask", "run", "--host", "0.0.0.0"]

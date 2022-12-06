@@ -12,16 +12,6 @@ from datetime import date
 mapi = Blueprint('mapi', __name__, url_prefix='/api')
 
 
-@mapi.route('/')
-def root():
-    return {'status': 'ok'}
-
-
-@mapi.route('/ping')
-def ping():
-    return {'status': 'ok'}
-
-
 # Used in mckeldin.html template
 @mapi.route('workstations-mckeldin.json')
 def workstations_mckeldin():
