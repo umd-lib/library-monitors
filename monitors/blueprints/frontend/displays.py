@@ -72,7 +72,6 @@ def stem_equipment_legacy():
     if equipment is not None:
         avail = equipment
 
-    monitors.logger.error(avail)
     current_date = datetime.datetime.now()
     avail_date = current_date.strftime("%I:%M %p on %a, %b %d")
     try:
@@ -93,7 +92,6 @@ def mckeldin_equipment_legacy():
     if equipment is not None:
         avail = equipment
 
-    monitors.logger.error(avail)
     current_date = datetime.datetime.now()
     avail_date = current_date.strftime("%I:%M %p on %a, %b %d")
     try:

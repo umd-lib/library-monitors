@@ -78,6 +78,7 @@ mck_headphones = prepare_equip(env['EQUIPMENT_MCK_HEADPHONES'])
 mck_floors = prepare_floors(env['WORKSTATIONS_MCK'])
 stem_floors = prepare_floors(env['WORKSTATIONS_STEM'])
 stem_equipment = prepare_equip(env['EQUIPMENT_STEM'])
+mck_equipment = prepare_equip(env['EQUIPMENT_MCK'])
 
 app.register_blueprint(displays)
 app.register_blueprint(mapi)

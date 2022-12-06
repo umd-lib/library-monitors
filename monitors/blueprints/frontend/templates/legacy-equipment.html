@@ -29,7 +29,7 @@
               <th width="20%">Next Due</th>
             </tr>
             {% set row_index = 0 %}
-            {% for result in availability_results %}
+            {% for key, result in availability_results.items() %}
               <tr class="{{ result.class }}">
                 <td>{{ result.title }}</td>
                 <td>{{ result.available }}</td>
@@ -44,5 +44,6 @@
     </tr>
   </tbody>
 </table>
+<p><b>Note:</b> Items may be renewed once before due if others are not waiting</p>
 </body>
 </html>

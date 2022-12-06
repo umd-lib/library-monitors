@@ -22,15 +22,16 @@ def ping():
     return {'status': 'ok'}
 
 
+# Used in mckeldin.html template
 @mapi.route('workstations-mckeldin.json')
 def workstations_mckeldin():
+    locs = monitors.mck_floors
     # default dict to json serialization sorts the data
     # but we need this unsorted for the frontend
-    # (unless we want to refactor the frontend JS)
-    locs = monitors.mck_floors
     return json.dumps(build_workstations_response(locs, True), sort_keys=False)
 
 
+# Used in mckeldin.html template
 @mapi.route('equipment-mckeldin.json')
 def equipment_mckeldin():
     return build_equipment_mckeldin(monitors.mck_laptops,
@@ -38,12 +39,16 @@ def equipment_mckeldin():
                                     monitors.mck_chargers, None, None)
 
 
+# Used in stem.html template
 @mapi.route('workstations-stem.json')
 def workstations_stem():
     locs = monitors.stem_floors
+    # default dict to json serialization sorts the data
+    # but we need this unsorted for the frontend
     return json.dumps(build_workstations_response(locs, True), sort_keys=False)
 
 
+# Used in stem.html template
 @mapi.route('equipment-stem.json')
 def equipment_stem():
     return build_equipment_stem(monitors.stem_laptops,
@@ -67,7 +72,8 @@ def build_workstations_response(locations, reverse_sort):
         }, 500
 
     if response.status_code != 200:
-        monitors.logger.error(f'Workstations backend received {response.status_code}')
+        monitors.logger.error(f'Workstations backend received \
+                              {response.status_code}')
         return {
             'endpoint': 'workstations',
             'error': {
@@ -77,7 +83,8 @@ def build_workstations_response(locations, reverse_sort):
 
     json_content = json.loads(response.text)
 
-    results = OrderedDict() 
+    # native dict doesn't seem to handle sorting well
+    results = OrderedDict()
     html_class = "bg-grey"
     for item in json_content:
         values = {}
@@ -110,6 +117,7 @@ def build_workstations_response(locations, reverse_sort):
                     html_class = 'bg-white'
                 results[key] = values
 
+    # The UI needs these in reverse order
     if reverse_sort:
         r_results = OrderedDict()
         reverse_keys = reversed(results)
@@ -150,7 +158,8 @@ def get_available_workstations(workstations):
     return counts
 
 
-def build_equipment_mckeldin(laptops, headphones, chargers, calculators, laptop_chargers):
+def build_equipment_mckeldin(laptops, headphones, chargers, calculators,
+                             laptop_chargers):
     result = []
     if chargers is not None:
         chargers_raw = equipment_request(chargers)
@@ -158,7 +167,8 @@ def build_equipment_mckeldin(laptops, headphones, chargers, calculators, laptop_
         result.append(chargers_html)
     if headphones is not None:
         headphones_raw = equipment_request(headphones)
-        headphones_html = generate_equipment_response(headphones_raw, 'Headphones')
+        headphones_html = generate_equipment_response(headphones_raw,
+                                                      'Headphones')
         result.append(headphones_html)
     if laptops is not None:
         laptops_raw = equipment_request(laptops)
@@ -170,12 +180,13 @@ def build_equipment_mckeldin(laptops, headphones, chargers, calculators, laptop_
 def build_equipment_legacy(equipment):
     result = []
     equipment_raw = equipment_request(equipment)
-    monitors.logger.error(equipment_raw)
-    equipment_html = generate_equipment_legacy_response(equipment_raw, "Equipment")
+    equipment_html = generate_equipment_legacy_response(equipment_raw,
+                                                        "Equipment")
     return equipment_html
 
 
-def build_equipment_stem(laptops, headphones, chargers, calculators, laptop_chargers):
+def build_equipment_stem(laptops, headphones, chargers, calculators,
+                         laptop_chargers):
     result = []
     if laptops is not None:
         laptops_raw = equipment_request(laptops)
@@ -183,19 +194,23 @@ def build_equipment_stem(laptops, headphones, chargers, calculators, laptop_char
         result.append(laptops_html)
     if chargers is not None:
         chargers_raw = equipment_request(chargers)
-        chargers_html = generate_equipment_response(chargers_raw, 'Phone Chargers')
+        chargers_html = generate_equipment_response(chargers_raw,
+                                                    'Phone Chargers')
         result.append(chargers_html)
     if laptop_chargers is not None:
         laptop_chargers_raw = equipment_request(laptop_chargers)
-        laptop_chargers_html = generate_equipment_response(laptop_chargers_raw, 'Laptop Chargers')
+        laptop_chargers_html = generate_equipment_response(laptop_chargers_raw,
+                                                           'Laptop Chargers')
         result.append(laptop_chargers_html)
     if headphones is not None:
         headphones_raw = equipment_request(headphones)
-        headphones_html = generate_equipment_response(headphones_raw, 'Headphones')
+        headphones_html = generate_equipment_response(headphones_raw,
+                                                      'Headphones')
         result.append(headphones_html)
     if calculators is not None:
         calculators_raw = equipment_request(calculators)
-        calculators_html = generate_equipment_response(calculators_raw, 'Calculators')
+        calculators_html = generate_equipment_response(calculators_raw,
+                                                       'Calculators')
         result.append(calculators_html)
     return result
 
@@ -236,52 +251,58 @@ def generate_equipment_response(raw_html, label):
 
 
 def generate_equipment_legacy_response(raw_html, label):
-    results = []
+    results_dict = {}
     soup = BeautifulSoup(raw_html, 'html.parser')
 
-    available = 0
-    total = 0
-    e_type = None
-    mindue = None
-    stored_type = None
     html_class = 'bg-grey'
-    for td in soup.find_all('td'):
+    for tr in soup.find_all('tr'):
         entry = {}
-        td_field = td.get('class')[0]
-        td_value = td.text
-        # result[td_field] = td_value
-        if td_field == 'available':
-            available = available + int(td_value)
-        if td_field == 'total':
-            total = total + int(td_value)
-        if td_field == 'type':
-            e_type = str(td_value)
-        if td_field == 'mindue':
-            if td_value is not None and td_value.isnumeric() and available <= 0:
-                mindue = date.fromtimestamp(int(td_value)).strftime("%a, %b %d")
-            elif available > 0:
-                mindue = 'Available Now'
-            else:
-                mindue = 'n/a'
-        if td_field == 'cpdpt':
-            # This is an ugly kludge
-            if stored_type != e_type:
-                entry['label'] = label
-                entry['total'] = total
-                entry['available'] = available
-                entry['title'] = e_type
-                entry['due'] = mindue
-                entry['class'] = html_class
-                results.append(entry)
-                entry = {}
-                stored_type = e_type
-                available = 0
-                total = 0
-                e_type = None
-                mindue = None
-                if html_class is 'bg-white':
-                    html_class = 'bg-grey'
+        available = 0
+        total = 0
+        e_type = None
+        mindue = None
+        for td in tr.find_all('td'):
+            td_field = td.get('class')[0]
+            td_value = td.text
+            if td_field == 'type':
+                e_type = str(td_value)
+            elif td_field == 'available':
+                available = int(td_value)
+            elif td_field == 'total':
+                total = int(td_value)
+            elif td_field == 'type':
+                e_type = str(td_value)
+            elif td_field == 'mindue':
+                if td_value is not None and td_value.isnumeric() and \
+                        available <= 0:
+                    mindue = date.fromtimestamp(int(td_value)). \
+                             strftime("%a, %b %d")
+                elif available > 0:
+                    mindue = 'Available Now'
                 else:
-                    html_class = 'bg-white'
-
-    return results
+                    mindue = 'n/a'
+            # this is the last column in the row
+            elif td_field == 'cpdpt':
+                if e_type in results_dict:
+                    # this already exists and the sum should be updated
+                    # rather than a new dict entry added
+                    if 'total' in results_dict[e_type]:
+                        tmp_total = results_dict[e_type]['total'] + total
+                        results_dict[e_type]['total'] = tmp_total
+                    if 'available' in results_dict[e_type]:
+                        tmp_available = results_dict[e_type]['available'] + \
+                            available
+                        results_dict[e_type]['available'] = tmp_available
+                else:
+                    entry['label'] = label
+                    entry['total'] = total
+                    entry['available'] = available
+                    entry['title'] = e_type
+                    entry['due'] = mindue
+                    entry['class'] = html_class
+                    results_dict[e_type] = entry
+                    if html_class == 'bg-white':
+                        html_class = 'bg-grey'
+                    else:
+                        html_class = 'bg-white'
+    return results_dict
