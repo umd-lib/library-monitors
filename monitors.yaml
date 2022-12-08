@@ -29,7 +29,6 @@ equipment_mck_headphones:
   - '004411757'
 
 # LEGACY DISPLAYS
-# Uses the format KEY|Floor,KEY|Floor
 workstations_stem:
   - EPL1F: 1st Floor
   - EPL2F: 2nd Floor
@@ -45,9 +44,8 @@ workstations_mck:
   - MCK6F: 6th Floor
   - MCK7F: 7th Floor
 # Uses the format Bibnum|Item,Bibnum|Item
-# E.g., 001234567|MacBook Air,007654321|Dell Latitude,etc...
 # Multiple bibnums for the same item are treated as distinct entries
-# E.g., 0024681012|Apple Charger,003691215|Apple Charger,etc...
+# but will be calculated together.
 equipment_stem:
   - '006298245': MacBook Air
   - '004413807': Dell Latitude
