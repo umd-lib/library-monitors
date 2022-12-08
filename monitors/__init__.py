@@ -3,6 +3,7 @@ import os
 
 import furl
 import requests
+import yaml
 from dotenv import load_dotenv
 from flask import Flask, request
 from paste.translogger import TransLogger
@@ -14,13 +15,7 @@ from monitors.blueprints.frontend.displays import displays
 load_dotenv('../.env')
 
 env = {}
-for key in ('WORKSTATIONS_API_BASE', 'EQUIPMENT_API_BASE',
-            'EQUIPMENT_STEM_LAPTOPS', 'EQUIPMENT_STEM_LAPTOP_CHARGERS',
-            'EQUIPMENT_STEM_CHARGERS', 'EQUIPMENT_STEM_CALCULATORS',
-            'EQUIPMENT_STEM_HEADPHONES', 'EQUIPMENT_MCK_HEADPHONES',
-            'EQUIPMENT_MCK_LAPTOPS', 'EQUIPMENT_MCK_CHARGERS',
-            'WORKSTATIONS_STEM', 'WORKSTATIONS_MCK',
-            'EQUIPMENT_STEM', 'EQUIPMENT_MCK'):
+for key in ('WORKSTATIONS_API_BASE', 'EQUIPMENT_API_BASE'):
     env[key] = os.environ.get(key)
     if env[key] is None:
         raise RuntimeError(f'Missing environment variable: {key}')
@@ -39,46 +34,50 @@ if debug:
 else:
     logger.setLevel(logging.INFO)
 
+with open('monitors.yaml', 'r') as mfile:
+    bibs_floors = yaml.safe_load(mfile)
+
 
 def prepare_equip(data):
-    arr = data.split(",")
     post_data = []
     i = 0
-    for bibnum in arr:
-        bib_raw = bibnum.split("|")
-        if len(bib_raw) >= 2:
-            post_data.append("bib=" + bib_raw[0] + "|" + bib_raw[1])
-        else:
-            post_data.append("bib=" + bibnum + "|Equipment" + str(i))
-            i = i + 1
+    for bibnum in data:
+        post_data.append("bib=" + bibnum + "|Equipment" + str(i))
+        i = i + 1
+
+    return "&".join(post_data)
+
+
+def prepare_legacy_equip(data):
+    post_data = []
+    for bibnum_arr in data:
+        for bibnum, name in bibnum_arr.items():
+            post_data.append("bib=" + str(bibnum) + "|" + name)
 
     return "&".join(post_data)
 
 
 def prepare_floors(data):
     floors = {}
-    arr = data.split(",")
-    for floor in arr:
-        floor_raw = floor.split("|")
-        if len(floor_raw) >= 2:
-            floors[floor_raw[0]] = floor_raw[1]
-        else:
-            floors[floor_raw[0]] = floor_raw[0]
+    for floor in data:
+        for key, name in floor.items():
+            floors[key] = name
     return floors
 
 
-stem_chargers = prepare_equip(env['EQUIPMENT_STEM_CHARGERS'])
-stem_laptop_chargers = prepare_equip(env['EQUIPMENT_STEM_LAPTOP_CHARGERS'])
-stem_laptops = prepare_equip(env['EQUIPMENT_STEM_LAPTOPS'])
-stem_calculators = prepare_equip(env['EQUIPMENT_STEM_CALCULATORS'])
-stem_headphones = prepare_equip(env['EQUIPMENT_STEM_HEADPHONES'])
-mck_chargers = prepare_equip(env['EQUIPMENT_MCK_CHARGERS'])
-mck_laptops = prepare_equip(env['EQUIPMENT_MCK_LAPTOPS'])
-mck_headphones = prepare_equip(env['EQUIPMENT_MCK_HEADPHONES'])
-mck_floors = prepare_floors(env['WORKSTATIONS_MCK'])
-stem_floors = prepare_floors(env['WORKSTATIONS_STEM'])
-stem_equipment = prepare_equip(env['EQUIPMENT_STEM'])
-mck_equipment = prepare_equip(env['EQUIPMENT_MCK'])
+stem_chargers = prepare_equip(bibs_floors['equipment_stem_chargers'])
+stem_laptop_chargers = prepare_equip(bibs_floors['equipment_stem_lchargers'])
+stem_laptops = prepare_equip(bibs_floors['equipment_stem_laptops'])
+stem_calculators = prepare_equip(bibs_floors['equipment_stem_calc'])
+stem_headphones = prepare_equip(bibs_floors['equipment_stem_headphones'])
+mck_chargers = prepare_equip(bibs_floors['equipment_mck_chargers'])
+mck_laptops = prepare_equip(bibs_floors['equipment_mck_laptops'])
+mck_headphones = prepare_equip(bibs_floors['equipment_mck_headphones'])
+stem_equipment = prepare_legacy_equip(bibs_floors['equipment_stem'])
+mck_equipment = prepare_legacy_equip(bibs_floors['equipment_mck'])
+mck_floors = prepare_floors(bibs_floors['workstations_mck'])
+stem_floors = prepare_floors(bibs_floors['workstations_stem'])
+stem_nearby = prepare_floors(bibs_floors['workstations_stem_nearby'])
 
 app.register_blueprint(displays)
 app.register_blueprint(mapi)
