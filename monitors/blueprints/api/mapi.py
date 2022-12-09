@@ -1,8 +1,6 @@
 import requests
 import monitors
 import json
-import datetime
-import time
 
 from flask import Blueprint
 from collections import OrderedDict
