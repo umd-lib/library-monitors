@@ -30,20 +30,19 @@ equipment_mck_headphones:
 
 # LEGACY DISPLAYS
 workstations_stem:
-  - EPL1F: 1st Floor
-  - EPL2F: 2nd Floor
-  - EPL3F: 3rd Floor
+  - EPL1F: 1st
+  - EPL2F: 2nd
+  - EPL3F: 3rd
 workstations_stem_nearby:
   - MDR1F: Hornbake Library
 workstations_mck:
-  - MCK1F: 1st Floor
-  - MCK2F: 2nd Floor
-  - MCK3F: 3rd Floor
-  - MCK4F: 4th Floor
-  - MCK5F: 5th Floor
-  - MCK6F: 6th Floor
-  - MCK7F: 7th Floor
-# Uses the format Bibnum|Item,Bibnum|Item
+  - MCK1F: 1st
+  - MCK2F: 2nd
+  - MCK3F: 3rd
+  - MCK4F: 4th
+  - MCK5F: 5th
+  - MCK6F: 6th
+  - MCK7F: 7th
 # Multiple bibnums for the same item are treated as distinct entries
 # but will be calculated together.
 equipment_stem:

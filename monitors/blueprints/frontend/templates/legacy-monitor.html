@@ -31,7 +31,7 @@
               {% for key, result in availability_results.items() %}
                 <tr class="{{ result.class }}">
                 {% set location_key = result.key %}
-                  <td>{{ library_name}} Library {{ result.name }}</td>
+                  <td>{{ library_name}} Library {{ result.name }} Floor</td>
                   <td>
                     {% if result.available > 0 %}
                       {{ result.available }}
