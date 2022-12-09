@@ -7,7 +7,7 @@ from collections import OrderedDict
 from bs4 import BeautifulSoup
 from datetime import date
 
-mapi = Blueprint('mapi', __name__, url_prefix='/api')
+mapi = Blueprint('mapi', __name__, url_prefix='/monitors/api')
 
 
 # Used in mckeldin.html template

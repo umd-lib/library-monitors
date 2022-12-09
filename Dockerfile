@@ -16,4 +16,4 @@ ENV FLASK_APP "/app/monitors/__init__.py"
 
 COPY ./monitors /app/monitors
 
-CMD ["flask", "run", "--host", "0.0.0.0"]
+CMD ["waitress-serve", "--port", "5000", "--call", "monitors:run_app"]

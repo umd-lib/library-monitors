@@ -79,8 +79,8 @@
   <script type="text/javascript">
     google.charts.load("current", {"packages":["bar"]});
     google.charts.setOnLoadCallback(fetchAndUpdate);
-    const EQUIPMENT_JSON_URL = "/api/equipment-stem.json";
-    const WORKSTATION_JSON_URL = "/api/workstations-stem.json";
+    const EQUIPMENT_JSON_URL = "/monitors/api/equipment-stem.json";
+    const WORKSTATION_JSON_URL = "/monitors/api/workstations-stem.json";
     // How often to update, in milliseconds
     const UPDATE_INTERVAL = 60 * 1000; // Once a minute
     // Number of milliseconds before data is considered "stale"
