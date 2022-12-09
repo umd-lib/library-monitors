@@ -14,7 +14,7 @@ def mckeldin():
     try:
         return render_template('mckeldin.html')
     except TemplateNotFound:
-        about(404)
+        abort(404)
 
 
 @displays.route('/stem')
@@ -22,7 +22,7 @@ def stem():
     try:
         return render_template('stem.html')
     except TemplateNotFound:
-        about(404)
+        abort(404)
 
 
 @displays.route('/mckeldin-workstations-legacy')
@@ -41,7 +41,7 @@ def mckeldin_workstations_legacy():
                                library_name="McKeldin",
                                availability_results=avail)
     except TemplateNotFound:
-        about(404)
+        abort(404)
 
 
 @displays.route('/stem-workstations-legacy')
@@ -66,7 +66,7 @@ def stem_workstations_legacy():
                                availability_results=avail,
                                nearby_results=nearby_avail)
     except TemplateNotFound:
-        about(404)
+        abort(404)
 
 
 @displays.route('/stem-equipment-legacy')
@@ -86,7 +86,7 @@ def stem_equipment_legacy():
                                library_name="STEM",
                                availability_results=avail)
     except TemplateNotFound:
-        about(404)
+        abort(404)
 
 
 @displays.route('/mckeldin-equipment-legacy')
@@ -106,4 +106,4 @@ def mckeldin_equipment_legacy():
                                library_name="STEM",
                                availability_results=avail)
     except TemplateNotFound:
-        about(404)
+        abort(404)
