@@ -1,8 +1,10 @@
 import monitors
 import datetime
+import zoneinfo
 
 from flask import Blueprint, render_template, abort
 from jinja2 import TemplateNotFound
+from zoneinfo import ZoneInfo
 from monitors.blueprints.api import mapi
 
 displays = Blueprint('displays', __name__, template_folder='templates',
@@ -34,7 +36,8 @@ def mckeldin_workstations_legacy():
     if workstations is not None:
         avail = workstations
 
-    current_date = datetime.datetime.now()
+    ny = ZoneInfo("America/New_York")
+    current_date = datetime.datetime.now().astimezone(ny)
     avail_date = current_date.strftime("%I:%M %p on %a, %b %d")
     try:
         return render_template('legacy-monitor.html', last_updated=avail_date,
@@ -58,7 +61,8 @@ def stem_workstations_legacy():
     if nearby_workstations is not None:
         nearby_avail = nearby_workstations
 
-    current_date = datetime.datetime.now()
+    ny = ZoneInfo("America/New_York")
+    current_date = datetime.datetime.now().astimezone(ny)
     avail_date = current_date.strftime("%I:%M %p on %a, %b %d")
     try:
         return render_template('legacy-monitor.html', last_updated=avail_date,
@@ -78,7 +82,8 @@ def stem_equipment_legacy():
     if equipment is not None:
         avail = equipment
 
-    current_date = datetime.datetime.now()
+    ny = ZoneInfo("America/New_York")
+    current_date = datetime.datetime.now().astimezone(ny)
     avail_date = current_date.strftime("%I:%M %p on %a, %b %d")
     try:
         return render_template('legacy-equipment.html',
@@ -98,7 +103,8 @@ def mckeldin_equipment_legacy():
     if equipment is not None:
         avail = equipment
 
-    current_date = datetime.datetime.now()
+    ny = ZoneInfo("America/New_York")
+    current_date = datetime.datetime.now().astimezone(ny)
     avail_date = current_date.strftime("%I:%M %p on %a, %b %d")
     try:
         return render_template('legacy-equipment.html',
