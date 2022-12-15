@@ -33,8 +33,6 @@ workstations_stem:
   - EPL1F: 1st
   - EPL2F: 2nd
   - EPL3F: 3rd
-workstations_stem_nearby:
-  - MDR1F: Hornbake Library
 workstations_mck:
   - MCK1F: 1st
   - MCK2F: 2nd

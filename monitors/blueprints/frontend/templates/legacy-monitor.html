@@ -54,47 +54,6 @@
         </div>
       </td>
     </tr>
-    {% if nearby_results %}
-    <tr>
-      <td width="83%">
-        <div>
-          <h2 style="margin: 0px; padding: 0px 0px 0px 5px">Nearby Libraries</h2>
-          <table id="workstation-availability-table" data-mode="reflow" data-role="table" class="htmtableborders" style="width: 100%; display: table; background-image: none; border-collapse: separate; float: none; border-style: none;">
-            <tbody>
-              <tr>
-                <th>
-                <th>Available Computers</th>
-                <th>Total Computers</th>
-              </tr>
-              
-              {% set row_index = 0 %}
-              {% for key, result in nearby_results.items() %}
-                <tr class="{{ result.class }}">
-                {% set location_key = result.key %}
-                  <td>{{ result.name }}</td>
-                  <td>
-                    {% if result.available > 0 %}
-                      {{ result.available }}
-                    {% else %}
-                      N/A
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if result.total > 0 %}
-                      {{ result.total }}
-                    {% else %}
-                      N/A
-                    {% endif %}
-                  </td>
-                </tr>
-                {% set row_index = row_index + 1 %}
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </td>
-    </tr>
-    {% endif %}
   </tbody>
 </table>
 </body>

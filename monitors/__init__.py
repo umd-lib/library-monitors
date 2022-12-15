@@ -77,7 +77,6 @@ stem_equipment = prepare_legacy_equip(bibs_floors['equipment_stem'])
 mck_equipment = prepare_legacy_equip(bibs_floors['equipment_mck'])
 mck_floors = prepare_floors(bibs_floors['workstations_mck'])
 stem_floors = prepare_floors(bibs_floors['workstations_stem'])
-stem_nearby = prepare_floors(bibs_floors['workstations_stem_nearby'])
 
 app.register_blueprint(displays)
 app.register_blueprint(mapi)

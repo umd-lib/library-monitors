@@ -50,16 +50,11 @@ def mckeldin_workstations_legacy():
 @displays.route('/stem-workstations-legacy')
 def stem_workstations_legacy():
     avail = None
-    nearby_avail = None
 
     locs = monitors.stem_floors
     workstations = mapi.build_workstations_response(locs, False)
-    nearby_locs = monitors.stem_nearby
-    nearby_workstations = mapi.build_workstations_response(nearby_locs, False)
     if workstations is not None:
         avail = workstations
-    if nearby_workstations is not None:
-        nearby_avail = nearby_workstations
 
     ny = ZoneInfo("America/New_York")
     current_date = datetime.datetime.now().astimezone(ny)
@@ -67,8 +62,7 @@ def stem_workstations_legacy():
     try:
         return render_template('legacy-monitor.html', last_updated=avail_date,
                                library_name="STEM",
-                               availability_results=avail,
-                               nearby_results=nearby_avail)
+                               availability_results=avail)
     except TemplateNotFound:
         abort(404)
 
