@@ -24,7 +24,7 @@
 			</div>
           <div class="col-lg-5 available-stem" id="workstations-available"></div>
        </div>
-      <div class="row">
+      <!--<div class="row">
             <div class="col-lg-6 equipment-stem">
 			<div aria-hidden="true" class="fa fa-2x fa-laptop" title="Laptops"></div>
 			    <h2 class="h2-stem">Laptops</h2>
@@ -37,11 +37,20 @@
 				<h2 class="h2-stem">Calculators</h2>
 		   </div>
           <div class="col-lg-5 available-stem" id="equipment4-available"></div>
-      </div>
+      </div>-->
      </div> <!-- end of workstation,laptop,calculator column -->
      <!-- start of equipment loan column -->
      <div class="col-lg-6 offset-lg-1" style="border: 1px solid #ccc;">
-        <div class="row">
+       <div class="row">
+        <div class="col-lg-6 equipment-stem">
+          <h2>We loan out equipment such as laptops, headsets, phone and computer chargers, more more. To view availability, visit:</h2>
+          <h3><a href="https://go.umd.edu/equipment-stem">go.umd.edu/equipment-stem</a></h3>
+        </div>
+        <div class="col-lg-5 equipment-stem">
+          <div><img src="{{ url_for('displays.static', filename='images/umd-equipment-stem.png') }}" /></div>
+        </div>
+       </div>
+        <!--<div class="row">
                <div class="col-lg-7 equipment-stem">
 				<div class="fa-stack fa">
 				  <span aria-hidden="true" class="fa fa-mobile-alt fa-stack-2x"></span>
@@ -67,13 +76,13 @@
 				   <h2 class="h2-stem margin-top-8">Headphones</h2>
 				 </div>
                <div class="col-lg-4 available-stem" id="equipment3-available"></div>
-        </div>
+        </div>-->
         </div> 
         <!-- end of equipment loan column -->
       </div>
-      <div class="text-center">
+      <!--<div class="text-center">
 	    		<h2 style="margin-top:30px;">To see a complete list of available Equipment Loans, visit <a href="https://go.umd.edu/equipment"> go.umd.edu/equipment</a></h2>
-      </div>
+      </div>-->
   </main>
 
   <script type="text/javascript">
@@ -207,11 +216,11 @@
       }
     }
     // Set up fetchers
-    var equipmentAvailabilityFetcher = new EquipmentAvailabilityFetcher(EQUIPMENT_JSON_URL, STALE_DATA_TIMEOUT);
+    // var equipmentAvailabilityFetcher = new EquipmentAvailabilityFetcher(EQUIPMENT_JSON_URL, STALE_DATA_TIMEOUT);
     var workstationAvailabilityFetcher = new WorkstationAvailabilityFetcher(WORKSTATION_JSON_URL, STALE_DATA_TIMEOUT);
     // Periodic fetch function
     function fetchAndUpdate() {
-      equipmentAvailabilityFetcher.fetch();
+      // equipmentAvailabilityFetcher.fetch();
       workstationAvailabilityFetcher.fetch();
     }
     // Set AJAX interval for fetching

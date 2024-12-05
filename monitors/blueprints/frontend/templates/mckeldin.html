@@ -82,14 +82,19 @@
 
      <div class="col-lg-5 offset-lg-1" style="border: 1px solid #ccc;">
      <!-- start of equipment loan column -->
-       <div class="row">
-        <div class="col-lg-6" style="text-align: center"><h1></h1></div>
+       <!--<div class="row">
+        <div class="col-lg-6" style="text-align: center"></div>
         <div class="col-lg-6">
           <h1>@ 2nd floor</h1>
         </div>
-      </div>
+      </div>-->
       <div class="row">
-        <div class="col-lg-6 equipment">
+        <div class="col-lg-12">
+          <h1>We loan out equipment such as laptops, headsets, phone and computer chargers, more more. To view availability, visit: </h1>
+          <h2><a href="https://go.umd.edu/equipment-mck">go.umd.edu/equipment-mck</a></h2>
+          <p><img src="{{ url_for('displays.static', filename='images/umd-equipment-mck.png') }}" /></p>
+        </div>
+        <!--<div class="col-lg-6 equipment">
           <div aria-hidden="true" class="fa fa-lg fa-battery-full"></div>
           <h2 id="equipment0-label"></h2>
         </div>
@@ -303,11 +308,11 @@
       }
     }
     // Set up fetchers
-    var equipmentAvailabilityFetcher = new EquipmentAvailabilityFetcher(EQUIPMENT_JSON_URL, STALE_DATA_TIMEOUT);
+    // var equipmentAvailabilityFetcher = new EquipmentAvailabilityFetcher(EQUIPMENT_JSON_URL, STALE_DATA_TIMEOUT);
     var workstationAvailabilityFetcher = new WorkstationAvailabilityFetcher(WORKSTATION_JSON_URL, STALE_DATA_TIMEOUT);
     // Periodic fetch function
     function fetchAndUpdate() {
-      equipmentAvailabilityFetcher.fetch();
+      // equipmentAvailabilityFetcher.fetch();
       workstationAvailabilityFetcher.fetch();
     }
     // Set AJAX interval for fetching
