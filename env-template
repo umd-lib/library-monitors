@@ -7,5 +7,11 @@ FLASK_DEBUG=TRUE
 # URL of the workstations backend service.
 WORKSTATIONS_API_BASE=https://wstrack.lib.umd.edu/availability/list?format=json
 
-# URL of the equipment backend service.
-EQUIPMENT_API_BASE=https://catalog.umd.edu/cgi-bin/laptops
+# LibApps Base
+LIBAPPS_BASE=https://umd.libcal.com/api/1.1
+
+# LibApps ClientID
+LIBAPPS_CLIENT=
+
+# LibApps Secret
+LIBAPPS_SECRET=

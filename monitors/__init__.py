@@ -10,12 +10,16 @@ from paste.translogger import TransLogger
 from waitress import serve
 
 from monitors.blueprints.api.mapi import mapi
+from monitors.blueprints.api.libapps import libapps
 from monitors.blueprints.frontend.displays import displays
 
 load_dotenv('../.env')
 
 env = {}
-for key in ('WORKSTATIONS_API_BASE', 'EQUIPMENT_API_BASE'):
+for key in ('WORKSTATIONS_API_BASE',
+            'LIBAPPS_BASE',
+            'LIBAPPS_CLIENT',
+            'LIBAPPS_SECRET'):
     env[key] = os.environ.get(key)
     if env[key] is None:
         raise RuntimeError(f'Missing environment variable: {key}')
@@ -24,7 +28,11 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
 workstations_api = furl.furl(env['WORKSTATIONS_API_BASE'])
-equipment_api = furl.furl(env['EQUIPMENT_API_BASE'])
+
+libapps_api = furl.furl(env['LIBAPPS_BASE'])
+libapps_client = env['LIBAPPS_CLIENT']
+libapps_secret = env['LIBAPPS_SECRET']
+
 debug = os.environ.get('FLASK_DEBUG')
 
 logger = logging.getLogger('library-monitors')
@@ -38,25 +46,6 @@ with open('monitors.yaml', 'r') as mfile:
     bibs_floors = yaml.safe_load(mfile)
 
 
-def prepare_equip(data):
-    post_data = []
-    i = 0
-    for bibnum in data:
-        post_data.append("bib=" + bibnum + "|Equipment" + str(i))
-        i = i + 1
-
-    return "&".join(post_data)
-
-
-def prepare_legacy_equip(data):
-    post_data = []
-    for bibnum_arr in data:
-        for bibnum, name in bibnum_arr.items():
-            post_data.append("bib=" + str(bibnum) + "|" + name)
-
-    return "&".join(post_data)
-
-
 def prepare_floors(data):
     floors = {}
     for floor in data:
@@ -65,21 +54,12 @@ def prepare_floors(data):
     return floors
 
 
-stem_chargers = prepare_equip(bibs_floors['equipment_stem_chargers'])
-stem_laptop_chargers = prepare_equip(bibs_floors['equipment_stem_lchargers'])
-stem_laptops = prepare_equip(bibs_floors['equipment_stem_laptops'])
-stem_calculators = prepare_equip(bibs_floors['equipment_stem_calc'])
-stem_headphones = prepare_equip(bibs_floors['equipment_stem_headphones'])
-mck_chargers = prepare_equip(bibs_floors['equipment_mck_chargers'])
-mck_laptops = prepare_equip(bibs_floors['equipment_mck_laptops'])
-mck_headphones = prepare_equip(bibs_floors['equipment_mck_headphones'])
-stem_equipment = prepare_legacy_equip(bibs_floors['equipment_stem'])
-mck_equipment = prepare_legacy_equip(bibs_floors['equipment_mck'])
 mck_floors = prepare_floors(bibs_floors['workstations_mck'])
 stem_floors = prepare_floors(bibs_floors['workstations_stem'])
 
 app.register_blueprint(displays)
 app.register_blueprint(mapi)
+app.register_blueprint(libapps)
 
 
 @app.route('/')
