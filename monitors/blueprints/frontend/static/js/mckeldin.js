@@ -195,10 +195,10 @@ const UIService = {
     if (!data) return;
 
     // First floor
-    this.updateComputerSection("info-1st", data.floor1);
+    this.updateComputerSection("info-1st", data.MCK1F);
 
     // Second floor
-    this.updateComputerSection("info-2nd", data.floor2);
+    this.updateComputerSection("info-2nd", data.MCK2F);
   },
 
   /**
@@ -213,8 +213,7 @@ const UIService = {
     const decoEl = section.querySelector("#content-deco");
 
     availableEl.innerHTML = floorData.available;
-    const total = floorData.available + floorData.occupied;
-    totalEl.innerHTML = total;
+    totalEl.innerHTML = floorData.total;
     decoEl.innerHTML = "/";
   },
 
