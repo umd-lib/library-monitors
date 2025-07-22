@@ -6,7 +6,7 @@ const CONFIG = {
   endpoints: {
     hours: "/api/libtools/stem/hours/today",
     hours_makerspace: "/api/libtools/makerspace/hours/today",
-    equipment: "https://api.www.lib.umd.edu/alma-service/equipment",
+    equipment: "/alma-service/equipment",
   },
   equipmentIds: {
     laptop_charger: ["990063177290108238"],
