@@ -10,36 +10,32 @@
     <script src="{{ url_for('displays.static', filename='js/mckeldin.js') }}"></script>
   </head>
   <body>
-    <main>
+    <main class="c-bg-primary dark">
       <div class="container">
         <div class="grid">
-          <div id="title" class="t-display c-content-primary">
+          <div id="title" class="t-display c-content-primary dark">
             Mckeldin Library
           </div>
-          <div id="library-time">
-            <div class="card-group">
-              <div id="library-close" class="info-card c-bg-secondary">
-                <div
-                  id="library-status-title"
-                  class="title-sub t-card-title c-content-primary"
-                >
-                  Closes Today at
-                </div>
-                <div
-                  id="close-time"
-                  class="t-display c-content-interactive-tertiarty"
-                >
-                  --:-- --
-                </div>
-              </div>
-              <div class="info-card c-bg-secondary">
-                <div class="title-sub t-card-title c-content-primary">
-                  Current Time
-                </div>
-                <div id="current-time" class="t-display c-content-primary">
-                  --:-- --
-                </div>
-              </div>
+          <div id="library-close" class="info-card">
+            <div
+              id="library-status-title"
+              class="title-sub t-card-title c-content-primary"
+            >
+              Closes Today at
+            </div>
+            <div
+              id="close-time"
+              class="t-display c-content-interactive-tertiarty"
+            >
+              --:-- --
+            </div>
+          </div>
+          <div id="library-current" class="info-card">
+            <div class="title-sub t-card-title c-content-primary">
+              Current Time
+            </div>
+            <div id="current-time" class="t-display c-content-primary">
+              --:-- --
             </div>
           </div>
           <div id="room-availability">
