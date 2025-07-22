@@ -1,0 +1,12 @@
+# Informs Flask where to find the app. Should not be changed.
+FLASK_APP=monitors/
+
+# "True" if Flask debugging should be enabled, "False" otherwise.
+FLASK_DEBUG=TRUE
+
+# URL of the workstations backend service.
+WORKSTATIONS_API_BASE=
+
+# URL of the equipment backend service.
+EQUIPMENT_API_BASE=
+
