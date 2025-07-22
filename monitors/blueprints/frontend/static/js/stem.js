@@ -4,9 +4,15 @@ const CONFIG = {
   apiBaseUrl: "",
   refreshInterval: 60000, // 1 minute
   endpoints: {
-    hours: "/api/libtools/mckeldin/hours/today",
-    rooms: "/api/libtools/mckeldin/availability",
-    computers: "/monitors/api/workstations-mckeldin.json",
+    hours: "/api/libtools/stem/hours/today",
+    hours_makerspace: "/api/libtools/makerspace/hours/today",
+    equipment: "/alma-service/equipment",
+  },
+  equipmentIds: {
+    laptop_charger: ["990063177290108238"],
+    phone_charger: ["990063177290108238", "990043548720108238"],
+    calculator: ["990062992380108238", "990047016260108238"],
+    marker_kit: ["990040147850108238"],
   },
 };
 
@@ -41,6 +47,74 @@ const DataService = {
       UIService.showError(`Failed to load ${dataType} data`);
       return null;
     }
+  },
+
+  /**
+   * Fetch equipment data from new API
+   * @returns {Promise<Object>} - Equipment availability data by category
+   */
+  async fetchEquipmentData() {
+    try {
+      // Collect all unique equipment IDs
+      const allEquipmentIds = new Set();
+      Object.values(CONFIG.equipmentIds).forEach((ids) => {
+        ids.forEach((id) => allEquipmentIds.add(id));
+      });
+
+      const response = await fetch(CONFIG.endpoints.equipment, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([...allEquipmentIds]),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const rawData = await response.json();
+      return this.aggregateEquipmentData(rawData);
+    } catch (error) {
+      console.error("Error fetching equipment data:", error);
+      UIService.showError("Failed to load equipment data");
+      return null;
+    }
+  },
+
+  /**
+   * Aggregate equipment counts by category
+   * @param {Object} rawData - Raw API response
+   * @returns {Object} - Aggregated data by category
+   */
+  aggregateEquipmentData(rawData) {
+    const aggregated = {};
+
+    // Initialize categories with zero counts
+    Object.keys(CONFIG.equipmentIds).forEach((category) => {
+      aggregated[category] = { available: 0, total: 0 };
+    });
+
+    // Aggregate counts for each category
+    Object.keys(CONFIG.equipmentIds).forEach((category) => {
+      const categoryIds = CONFIG.equipmentIds[category];
+
+      categoryIds.forEach((equipmentId) => {
+        // Find matching entries in raw data (format: "mms_id--location")
+        Object.keys(rawData).forEach((key) => {
+          if (key.startsWith(equipmentId)) {
+            const item = rawData[key];
+            const available = parseInt(item.count) || 0;
+            const total = parseInt(item.total) || 0;
+
+            aggregated[category].available += available;
+            aggregated[category].total += total;
+          }
+        });
+      });
+    });
+
+    return aggregated;
   },
 };
 
@@ -132,105 +206,84 @@ const UIService = {
     if (data.status === "24hours") {
       libraryHourTitle.innerHTML = "Opens";
       libraryHour.innerHTML = "24 hours";
-    } else if (data.status === "closed" || data.status === "open") {
+    } else if (data.status === "close" || data.status === "open") {
       libraryHourTitle.innerHTML = "Closes Today at";
       libraryHour.innerHTML = Utils.formatTimeString(data.hours_to);
     }
-    // other status = show original data
   },
 
   /**
-   * Update library available rooms display
-   * @param {Object} data - Library rooms data
+   * Update makerspace hours display
+   * @param {Object} data - Makerspace hours data
    */
-  updateLibraryRooms(data) {
+  updateMakerspaceHours(data) {
     if (!data) return;
 
-    // Study carrels
-    this.updateRoomSection("info-carrel", data[23067]);
+    const makerspaceHourCardOpen =
+      document.getElementById("jsg-time-open-card");
+    const makerspaceHourCardClose = document.getElementById(
+      "jsg-time-close-card"
+    );
+    const makerspaceHourTitle = document.getElementById("jsg-status-title");
+    const makerspaceOpenHour = document.getElementById("jsg-time-open");
+    const makerspaceCloseHour = document.getElementById("jsg-time-close");
 
-    // Group study rooms
-    this.updateRoomSection("info-group", data[23065]);
+    if (data.status === "closed") {
+      // expand the open card to full width and hide the close card
+      makerspaceHourCardOpen.classList.add("makerspace-closed");
+      makerspaceHourCardClose.classList.add("hidden");
+
+      makerspaceHourTitle.innerHTML = "Today";
+      makerspaceOpenHour.innerHTML = "Closed";
+    } else if (data.status === "open") {
+      makerspaceHourCardOpen.classList.remove("makerspace-closed");
+      makerspaceHourCardClose.classList.remove("hidden");
+
+      makerspaceOpenHour.innerHTML = Utils.formatTimeString(data.hours_from);
+      makerspaceCloseHour.innerHTML = Utils.formatTimeString(data.hours_to);
+    }
   },
 
   /**
-   * Helper function to update a room section
-   * @param {string} sectionId - HTML element ID for the section
-   * @param {Object} roomData - Room data object
+   * Update equipment availability display
+   * @param {Object} data - Aggregated equipment data
    */
-  updateRoomSection(sectionId, roomData) {
-    const section = document.getElementById(sectionId);
-    const availableEl = section.querySelector("#available-count");
-    const totalEl = section.querySelector("#total-count");
-    const statusEl = section.querySelector("#available-status");
-    const decoEl = section.querySelector("#content-deco");
-    const barEl = section.querySelector("span.status-bar");
+  updateEquipmentAvailability(data) {
+    if (!data) return;
 
-    if (parseInt(roomData.available) > 0) {
-      statusEl.innerHTML = "Available";
-      availableEl.innerHTML = roomData.available;
-      totalEl.innerHTML = roomData.total;
-      decoEl.innerHTML = "/";
-    } else {
-      let nextAvailableTime = Utils.convertTimeFormat(roomData.next_available);
+    const equipmentMap = {
+      laptop_charger: "info-laptop-charger",
+      phone_charger: "info-phone-charger",
+      calculator: "info-calculator",
+      marker_kit: "info-marker-kit",
+    };
 
-      if (nextAvailableTime === false) {
-        statusEl.innerHTML = "Available";
-        availableEl.innerHTML = roomData.available;
-        totalEl.innerHTML = roomData.total;
-        decoEl.innerHTML = "/";
-      } else {
-        statusEl.innerHTML = "Next Available";
-        availableEl.innerHTML = nextAvailableTime;
-        totalEl.innerHTML = "";
-        decoEl.innerHTML = "";
+    // Update each equipment category
+    Object.keys(equipmentMap).forEach((category) => {
+      const containerId = equipmentMap[category];
+      const container = document.getElementById(containerId);
+
+      if (container && data[category]) {
+        const availableEl = container.querySelector("#available-count");
+        const totalEl = container.querySelector("#total-count");
+        const decoEl = container.querySelector("#content-deco");
+        const barEl = container.querySelector("span.status-bar");
+
+        if (availableEl) availableEl.textContent = data[category].available;
+        if (totalEl) totalEl.textContent = data[category].total;
+        if (decoEl) decoEl.textContent = "/";
+
+        // Update the availability bar
+        if (barEl && data[category].total > 0) {
+          let progressBarValue =
+            (data[category].available / data[category].total) * 100;
+          if (progressBarValue > 100) {
+            progressBarValue = 100;
+          }
+          barEl.style.width = `${progressBarValue}%`;
+        }
       }
-    }
-
-    // update the availability bar
-    let progressBarValue = (roomData.available / roomData.total) * 100;
-    if (progressBarValue > 100) {
-      progressBarValue = 100;
-    }
-    barEl.style.width = `${progressBarValue}%`;
-  },
-
-  /**
-   * Update library available computers display
-   * @param {Object} data - Library computers data
-   */
-  updateLibraryComputers(data) {
-    if (!data) return;
-
-    // First floor
-    this.updateComputerSection("info-1st", data.MCK1F);
-
-    // Second floor
-    this.updateComputerSection("info-2nd", data.MCK2F);
-  },
-
-  /**
-   * Helper function to update a computer section
-   * @param {string} sectionId - HTML element ID for the section
-   * @param {Object} floorData - Floor data object
-   */
-  updateComputerSection(sectionId, floorData) {
-    const section = document.getElementById(sectionId);
-    const availableEl = section.querySelector("#available-count");
-    const totalEl = section.querySelector("#total-count");
-    const decoEl = section.querySelector("#content-deco");
-    const barEl = section.querySelector("span.status-bar");
-
-    availableEl.innerHTML = floorData.available;
-    totalEl.innerHTML = floorData.total;
-    decoEl.innerHTML = "/";
-
-    // update the availability bar
-    let progressBarValue = (floorData.available / floorData.total) * 100;
-    if (progressBarValue > 100) {
-      progressBarValue = 100;
-    }
-    barEl.style.width = `${progressBarValue}%`;
+    });
   },
 
   /**
@@ -272,11 +325,11 @@ const LibraryApp = {
     const hoursData = await DataService.fetchData("hours");
     UIService.updateLibraryHours(hoursData);
 
-    const roomsData = await DataService.fetchData("rooms");
-    UIService.updateLibraryRooms(roomsData);
+    const makerspaceHoursData = await DataService.fetchData("hours_makerspace");
+    UIService.updateMakerspaceHours(makerspaceHoursData);
 
-    const computersData = await DataService.fetchData("computers");
-    UIService.updateLibraryComputers(computersData);
+    const equipmentData = await DataService.fetchEquipmentData();
+    UIService.updateEquipmentAvailability(equipmentData);
 
     console.log(`Last updated: ${new Date().toLocaleTimeString()}`);
   },

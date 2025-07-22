@@ -1,230 +1,269 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Workstation/Equipment Availability</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+  <head>
+    <meta charset="UTF-8" />
+    <title>STEM Library Monitor</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('displays.static', filename='css/stem.css') }}"
+    />
+    <script src="{{ url_for('displays.static', filename='js/stem.js') }}"></script>
+  </head>
+  <body>
+    <main class="c-bg-primary dark">
+      <div class="container">
+        <div class="grid">
+          <div id="title" class="t-display c-content-primary dark">
+            STEM Library
+          </div>
+          <div id="library-time-close">
+            <div id="library-close" class="info-card">
+              <div
+                id="library-status-title"
+                class="title-sub t-card-title c-content-primary"
+              >
+                Closes Today at
+              </div>
+              <div
+                id="close-time"
+                class="t-display c-content-interactive-tertiarty"
+              >
+                --:-- --
+              </div>
+            </div>
+          </div>
+          <div id="library-time-current">
+            <div class="info-card">
+              <div class="title-sub t-card-title c-content-primary">
+                Current Time
+              </div>
+              <div id="current-time" class="t-display c-content-primary">
+                --:-- --
+              </div>
+            </div>
+          </div>
+          <div id="equipment-availability">
+            <div class="card-title t-section-title c-content-primary">
+              Equipment Loan
+            </div>
+            <div class="equipment-cards card-group">
+              <div id="laptops" class="info-card c-bg-secondary">
+                <div class="title-sub t-card-title c-content-primary">
+                  Laptop Chargers
+                </div>
+                <div
+                  id="info-laptop-charger"
+                  class="info-card-content c-content-primary"
+                >
+                  <div class="info-main">
+                    <div class="number c-content-tertiary">
+                      <div
+                        id="available-count"
+                        class="t-display c-content-primary"
+                      >
+                        --
+                      </div>
+                      <div id="content-deco">/</div>
+                      <div id="total-count">--</div>
+                    </div>
+                    <div
+                      id="available-status"
+                      class="sub-text t-section-description-text c-content-tertiary"
+                    >
+                      Available
+                    </div>
+                  </div>
 
-<link rel="stylesheet" media="all" href="{{ url_for('displays.static', filename='css/stem.css') }}" />
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                  <div class="status-bar">
+                    <span class="status-bar"></span>
+                  </div>
+                </div>
+              </div>
+              <div id="chargers" class="info-card c-bg-secondary">
+                <div class="title-sub t-card-title c-content-primary">
+                  Phone Chargers
+                </div>
+                <div
+                  id="info-phone-charger"
+                  class="info-card-content c-content-primary"
+                >
+                  <div class="info-main">
+                    <div class="number c-content-tertiary">
+                      <div
+                        id="available-count"
+                        class="t-display c-content-primary"
+                      >
+                        --
+                      </div>
+                      <div id="content-deco">/</div>
+                      <div id="total-count">--</div>
+                    </div>
+                    <div
+                      id="available-status"
+                      class="sub-text t-section-description-text c-content-tertiary"
+                    >
+                      Available
+                    </div>
+                  </div>
 
-</head>
+                  <div class="status-bar">
+                    <span class="status-bar"></span>
+                  </div>
+                </div>
+              </div>
+              <div id="calculators" class="info-card c-bg-secondary">
+                <div class="title-sub t-card-title c-content-primary">
+                  Calculators
+                </div>
+                <div
+                  id="info-calculator"
+                  class="info-card-content c-content-primary"
+                >
+                  <div class="info-main">
+                    <div class="number c-content-tertiary">
+                      <div
+                        id="available-count"
+                        class="t-display c-content-primary"
+                      >
+                        --
+                      </div>
+                      <div id="content-deco">/</div>
+                      <div id="total-count">--</div>
+                    </div>
+                    <div
+                      id="available-status"
+                      class="sub-text t-section-description-text c-content-tertiary"
+                    >
+                      Available
+                    </div>
+                  </div>
 
-<body>
-  <main style="width: 95%">
-     <h1 style="text-align: center; margin: 40px; font-size: 60px; word-spacing: 15px">Currently Available @ the STEM Library</h1>
-      <div class="row  margin-top-60">
-         <div class="col-lg-5 " style="border: 1px solid #ccc;">
-      <!-- 1st two columns -->
-       <div class="row">
-            <div class="col-lg-6 equipment-stem">
-			<div aria-hidden="true" class="fa fa-2x fa-desktop" title="Desktops"></div>
-				<h2 class="h2-stem">Desktops</h2>
-			</div>
-          <div class="col-lg-5 available-stem" id="workstations-available"></div>
-       </div>
-      <!--<div class="row">
-            <div class="col-lg-6 equipment-stem">
-			<div aria-hidden="true" class="fa fa-2x fa-laptop" title="Laptops"></div>
-			    <h2 class="h2-stem">Laptops</h2>
-			</div>
-          <div class="col-lg-5 available-stem" id="equipment0-available"></div>
+                  <div class="status-bar">
+                    <span class="status-bar"></span>
+                  </div>
+                </div>
+              </div>
+              <div id="vr" class="info-card c-bg-secondary">
+                <div class="title-sub t-card-title c-content-primary">
+                  Whiteboard Marker Kits
+                </div>
+                <div
+                  id="info-marker-kit"
+                  class="info-card-content c-content-primary"
+                >
+                  <div class="info-main">
+                    <div class="number c-content-tertiary">
+                      <div
+                        id="available-count"
+                        class="t-display c-content-primary"
+                      >
+                        --
+                      </div>
+                      <div id="content-deco">/</div>
+                      <div id="total-count">--</div>
+                    </div>
+                    <div
+                      id="available-status"
+                      class="sub-text t-section-description-text c-content-tertiary"
+                    >
+                      Available
+                    </div>
+                  </div>
+
+                  <div class="status-bar">
+                    <span class="status-bar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-content c-content-primary">
+              <div class="card-description t-section-title-sub">
+                Full List of Equipment
+              </div>
+              <div class="card-url t-section-description-text">
+                go.umd.edu/equipment-stem
+              </div>
+            </div>
+          </div>
+          <div id="space-info">
+            <div class="card-text-content">
+              <div class="card-title t-section-title c-content-primary">
+                Our Spaces
+              </div>
+              <div class="card-content c-content-primary">
+                <div class="card-description t-section-title-sub">
+                  Find study or meeting spaces for individual and groups. Filter
+                  by amenities and noise level.
+                </div>
+                <div class="card-url t-section-description-text">
+                  go.umd.edu/study-stem
+                </div>
+              </div>
+            </div>
+            <div class="card-qrcode">
+              <img
+                src="{{ url_for('displays.static', filename='images/umd-study-stem.svg') }}"
+                alt="QR Code"
+              />
+            </div>
+          </div>
+          <div id="jsg-makerspace">
+            <div class="card-title t-section-title c-content-primary">
+              John and Stella Graves Makerspace
+            </div>
+            <div class="jsg-makerspace-content">
+              <div id="jsg-time-open-card">
+                <div class="info-card c-bg-secondary">
+                  <div
+                    id="jsg-status-title"
+                    class="title-sub t-card-title c-content-primary"
+                  >
+                    Opens Today at
+                  </div>
+                  <div id="jsg-time-open" class="t-display c-content-primary">
+                    --:-- --
+                  </div>
+                </div>
+              </div>
+              <div id="jsg-time-close-card">
+                <div class="info-card c-bg-secondary">
+                  <div class="title-sub t-card-title c-content-primary">
+                    Closes Today at
+                  </div>
+                  <div id="jsg-time-close" class="t-display c-content-primary">
+                    --:-- --
+                  </div>
+                </div>
+              </div>
+              <div id="makerspace-info">
+                <div class="card-text-content">
+                  <div class="card-list t-section-title-sub c-content-primary">
+                    <ul>
+                      <li>3D printing</li>
+                      <li>Laser & Vinyl cutting</li>
+                      <li>Augmented & Virtual reality</li>
+                    </ul>
+                  </div>
+                  <div class="card-content c-content-primary">
+                    <div class="card-description t-section-title-sub">
+                      Hours, events, technology, policies.
+                    </div>
+                    <div class="card-url t-section-description-text">
+                      go.umd.edu/jsgmakerspace
+                    </div>
+                  </div>
+                </div>
+                <div class="card-qrcode">
+                  <img
+                    src="{{ url_for('displays.static', filename='images/umd-jsgmakerspace.svg') }}"
+                    alt="QR Code"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="row">
-           <div class="col-lg-6 equipment-stem">
-		   <div aria-hidden="true" class="fa fa-2x fa-calculator" title="Calculators"></div>
-				<h2 class="h2-stem">Calculators</h2>
-		   </div>
-          <div class="col-lg-5 available-stem" id="equipment4-available"></div>
-      </div>-->
-     </div> <!-- end of workstation,laptop,calculator column -->
-     <!-- start of equipment loan column -->
-     <div class="col-lg-6 offset-lg-1" style="border: 1px solid #ccc;">
-       <div class="row">
-        <div class="col-lg-6 equipment-stem">
-          <h2>We loan out equipment such as laptops, headsets, phone and computer chargers, more more. To view availability, visit:</h2>
-          <h3><a href="https://go.umd.edu/equipment-stem">go.umd.edu/equipment-stem</a></h3>
-        </div>
-        <div class="col-lg-5 equipment-stem">
-          <div><img src="{{ url_for('displays.static', filename='images/umd-equipment-stem.png') }}" /></div>
-        </div>
-       </div>
-        <!--<div class="row">
-               <div class="col-lg-7 equipment-stem">
-				<div class="fa-stack fa">
-				  <span aria-hidden="true" class="fa fa-mobile-alt fa-stack-2x"></span>
-				  <span class="fa fa-bolt fa-stack-1x" style="top:-10px;"></span>
-				</div>
-					<h2 class="h2-stem margin-top-8">Phone Chargers</h2>
-				</div>
-                <div class="col-lg-4 available-stem" id="equipment1-available"></div>
-        </div>
-        <div class="row">
-               <div class="col-lg-7 equipment-stem">
-                <div class="fa-stack fa">
-				  <span aria-hidden="true" class="fa fa-laptop fa-stack-2x"></span>
-				  <span class="fa fa-bolt fa-stack-1x" style="top:-20px;"></span>
-				</div>					
-					<h2 class="h2-stem margin-top-8">Laptop Chargers</h2>
-				</div>
-               <div class="col-lg-4 available-stem" id="equipment2-available"></div>
-        </div>
-        <div class="row">
-                 <div class="col-lg-7 equipment-stem">
-			    <div aria-hidden="true" class="fa fa-2x fa-headphones" title="headphones"></div>
-				   <h2 class="h2-stem margin-top-8">Headphones</h2>
-				 </div>
-               <div class="col-lg-4 available-stem" id="equipment3-available"></div>
-        </div>-->
-        </div> 
-        <!-- end of equipment loan column -->
-      </div>
-      <!--<div class="text-center">
-	    		<h2 style="margin-top:30px;">To see a complete list of available Equipment Loans, visit <a href="https://go.umd.edu/equipment"> go.umd.edu/equipment</a></h2>
-      </div>-->
-  </main>
-
-  <script type="text/javascript">
-    google.charts.load("current", {"packages":["bar"]});
-    google.charts.setOnLoadCallback(fetchAndUpdate);
-    const EQUIPMENT_JSON_URL = "/monitors/api/equipment-stem.json";
-    const WORKSTATION_JSON_URL = "/monitors/api/workstations-stem.json";
-    // How often to update, in milliseconds
-    const UPDATE_INTERVAL = 60 * 1000; // Once a minute
-    // Number of milliseconds before data is considered "stale"
-    const STALE_DATA_TIMEOUT = 10 * 60 * 1000; // 10 minutes
-    // Base class for "fetcher" subclasses
-    class Fetcher {
-      // url: the URL to fetch
-      // timeout: The number of milliseconds before data is considered "stale".
-      constructor(url, timeout) {
-        this.url = url;
-        this.timeout = timeout;
-        this.lastUpdate = null;
-      }
-      // Fetches URL and calls appropriate function on success/failure.
-      fetch() {
-        fetch(this.url)
-          .then(response => response.json())
-          .then(data => {
-            // Successful response
-            this.lastUpdate = Date.now();
-            this.recover();
-            this.success(data);
-          })
-          .catch(err => {
-            // Failed response
-            let now = Date.now();
-            if ((this.lastUpdate === null) ||
-                ((now - this.lastUpdate) >= this.timeout)) {
-                  this.stale();
-                }
-          });
-      }
-      // Function runs when a successful response is received.
-      // data - the JSON data contained in the response
-      success(data) {
-      }
-      // Function runs when timeout is exceeded.
-      stale() {
-      }
-      // "Recovery" function that restores from a "stale" state. This
-      // function runs for each successful response, so should include
-      // a check to determine if recovery is actually needed.
-      recover() {
-      }
-    }
-    // Fetcher implementation for Equipment Availability data
-    class EquipmentAvailabilityFetcher extends Fetcher {
-      constructor(url, timeout) {
-        super(url, timeout);
-      }
-      success(data) {
-        let equipAvail = document.getElementsByClassName("available-stem");
-        for(let i=0; i <equipAvail.length; i++) {
-          let equip = data[i];
-          let equipmentLabel = equip["label"];
-          let equipmentAvailable = equip["available"];
-          let equipmentKey = "equipment" + i;
-          let docAvailable = document.getElementById(equipmentKey+"-available");
-          if (docAvailable != null) {
-            docAvailable.innerText = equipmentAvailable;
-          }
-        }
-      }
-      stale() {
-        let equipAvail = document.getElementsByClassName("available-stem");
-        for(let i=0; i < equipAvail.length; i++) {
-          equipAvail[i].innerText = "?";
-          equipAvail[i].classList.add("update-failure");
-        }
-      }
-      recover() {
-        // Recover from failure, if necessary
-        let needsRecovery = document.getElementsByClassName("available-stem update-failure").length > 0;
-        if (needsRecovery) {
-          // Set number boxes back to green
-          let equipmentAvail = document.getElementsByClassName("available-stem");
-          for(let i=0; i < equipmentAvail.length; i++) {
-            equipmentAvail[i].classList.remove("update-failure");
-          }
-        }
-      }
-    }
-    // Fetcher implementation for Workstation Availability data
-    class WorkstationAvailabilityFetcher extends Fetcher {
-      constructor(url, timeout) {
-        super(url, timeout);
-      }
-      success(data) {
-        // Populate number boxes
-        let locationKeys = Object.keys(data);
-        let totalworkStations=0;
-        locationKeys.forEach( function(key) {
-          let workstationData = data[key];
-           totalworkStations=totalworkStations+parseInt(workstationData["available"],10)
-        });
-        let workstationDiv = document.getElementById("workstations-available");
-            workstationDiv.innerText =totalworkStations;
-      }
-
-      stale() {
-        // Set number boxes to red
-        let workstationAvail = document.getElementsByClassName("workstations-available");
-        for(let i=0; i < workstationAvail.length; i++) {
-          workstationAvail[i].innerText = "?";
-          workstationAvail[i].classList.add("update-failure");
-        }
-        // Hide the Goggle chart div
-        let chartDiv = document.getElementById("barchart_workstations");
-        chartDiv.style.visibility = "hidden";
-      }
-      recover() {
-        // Recover from failure, if necessary
-        let needsRecovery = document.getElementsByClassName("workstations-available update-failure").length > 0;
-        if (needsRecovery) {
-          // Set number boxes back to green
-          let workstationAvail = document.getElementsByClassName("workstations-available");
-          for(let i=0; i < workstationAvail.length; i++) {
-            workstationAvail[i].classList.remove("update-failure");
-          }
-          // Restore the Goggle chart div
-          let chartDiv = document.getElementById("barchart_workstations");
-          chartDiv.style.visibility = "visible";
-        }
-      }
-    }
-    // Set up fetchers
-    // var equipmentAvailabilityFetcher = new EquipmentAvailabilityFetcher(EQUIPMENT_JSON_URL, STALE_DATA_TIMEOUT);
-    var workstationAvailabilityFetcher = new WorkstationAvailabilityFetcher(WORKSTATION_JSON_URL, STALE_DATA_TIMEOUT);
-    // Periodic fetch function
-    function fetchAndUpdate() {
-      // equipmentAvailabilityFetcher.fetch();
-      workstationAvailabilityFetcher.fetch();
-    }
-    // Set AJAX interval for fetching
-    setInterval(fetchAndUpdate, UPDATE_INTERVAL);
-  </script>
-</body>
+    </main>
+  </body>
 </html>
