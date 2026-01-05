@@ -170,7 +170,6 @@
 /* font */
 .t-display {
   font-family: "Barlow Condensed";
-  /* font-size: 8rem; */
   font-size: 10vh;
   font-style: italic;
   font-weight: 700;
@@ -181,20 +180,18 @@
 
 .t-section-title {
   font-family: Interstate;
-  /* font-size: 4rem; */
-  font-size: 3.6vh;
+  font-size: 4vh;
   font-style: normal;
   font-weight: 700;
-  line-height: 3.6vh;
+  line-height: 4vh;
 }
 
 .t-section-title-sub {
   font-family: Interstate;
-  /* font-size: 2.5rem; */
-  font-size: 2.25vh;
+  font-size: 3.2vh;
   font-style: normal;
   font-weight: 400;
-  line-height: 2.25vh;
+  line-height: 3.2vh;
 
   margin-top: 0.9vh;
   margin-bottom: 0.9vh;
@@ -202,20 +199,18 @@
 
 .t-section-description-text {
   font-family: Interstate;
-  /* font-size: 1.75rem; */
-  font-size: 1.575vh;
+  font-size: 2vh;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.575vh;
+  line-height: 2vh;
 }
 
 .t-card-title {
   font-family: Interstate;
-  /* font-size: 2.5rem; */
-  font-size: 2.25vh;
+  font-size: 3.2vh;
   font-style: normal;
   font-weight: 700;
-  line-height: 2.25vh;
+  line-height: 3.2vh;
 }
 
 body {
@@ -255,7 +250,6 @@ main {
 
   display: flex;
   flex-direction: column;
-  gap: 1vh;
 
   background-color: var(--white);
   border-radius: 1.5rem;
@@ -265,21 +259,19 @@ main {
   display: flex;
   gap: 2vh;
   flex-grow: 1;
+
+  margin-top: 2vh;
 }
 
 .info-card {
-  width: 100%;
-  padding: 3vh;
+  flex: 1;
+  padding: 2vh;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
   border-radius: 1.5rem;
-}
-
-.title-sub {
-  margin-bottom: 0.9vh;
 }
 
 .number {
@@ -295,7 +287,7 @@ main {
 }
 
 .sub-text {
-  margin-bottom: 1.8vh;
+  margin-bottom: 1vh;
 }
 
 .status-bar {

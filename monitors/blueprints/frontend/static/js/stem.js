@@ -207,7 +207,7 @@ const UIService = {
       libraryHourTitle.innerHTML = "Opens";
       libraryHour.innerHTML = "24 hours";
     } else if (data.status === "close" || data.status === "open") {
-      libraryHourTitle.innerHTML = "Closes Today at";
+      libraryHourTitle.innerHTML = "Closes at";
       libraryHour.innerHTML = Utils.formatTimeString(data.hours_to);
     }
   },

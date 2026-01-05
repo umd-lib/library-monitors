@@ -180,37 +180,34 @@
 
 .t-section-title {
   font-family: Interstate;
-  font-size: 3.6vh;
+  font-size: 4vh;
   font-style: normal;
   font-weight: 700;
-  line-height: 3.6vh;
+  line-height: 4vh;
 }
 
 .t-section-title-sub {
   font-family: Interstate;
-  font-size: 2.25vh;
+  font-size: 3vh;
   font-style: normal;
   font-weight: 400;
-  line-height: 2.5vh;
-
-  margin-top: 0.9vh;
-  margin-bottom: 0.9vh;
+  line-height: 3vh;
 }
 
 .t-section-description-text {
   font-family: Interstate;
-  font-size: 1.575vh;
+  font-size: 2vh;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.575vh;
+  line-height: 2vh;
 }
 
 .t-card-title {
   font-family: Interstate;
-  font-size: 2.25vh;
+  font-size: 3vh;
   font-style: normal;
   font-weight: 700;
-  line-height: 2.25vh;
+  line-height: 3vh;
 }
 
 body {
@@ -250,7 +247,7 @@ main {
 
   display: flex;
   flex-direction: column;
-  gap: 3vh;
+  gap: 2vh;
 
   background-color: var(--white);
   border-radius: 1.5rem;
@@ -263,10 +260,6 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.title-sub {
-  margin-bottom: 0.9vh;
 }
 
 .info-main {
@@ -351,7 +344,7 @@ span.status-bar {
   grid-column: 1 / 5;
   grid-row: 4 / 9;
 
-  gap: 1vh;
+  gap: 2vh;
 }
 
 .equipment-cards {
@@ -364,6 +357,16 @@ span.status-bar {
     padding: 2vh;
     border-radius: 1.5rem;
   }
+}
+
+#equipment-availability > div.card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#equipment-availability > div.card-content div:first-child {
+  margin-right: 2vh;
 }
 
 #space-info {
@@ -393,7 +396,7 @@ span.status-bar {
 #jsg-makerspace {
   grid-column: 5 / 9;
   grid-row: 4 / 9;
-  gap: 1vh;
+  gap: 2vh;
 
   .jsg-makerspace-content {
     width: 100%;
@@ -434,7 +437,6 @@ span.status-bar {
   }
 }
 
-#computer-availability {
-  grid-column: 5 / 9;
-  grid-row: 2 / 5;
+#jsg-makerspace .card-content .card-description {
+  margin-bottom: 1vh;
 }
