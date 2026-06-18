@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -124,85 +124,103 @@
               />
             </div>
           </div>
-          <div id="computer-availability">
-            <div class="card-title t-section-title c-content-primary">
-              Computer Status
-            </div>
-            <div class="card-group">
-              <div class="info-card c-bg-secondary">
-                <div class="title-sub t-card-title c-content-primary">
-                  1st Floor
-                </div>
-                <div id="info-1st" class="info-card-content c-content-primary">
-                  <div class="number c-content-tertiary">
-                    <div
-                      id="available-count"
-                      class="t-display c-content-primary"
-                    >
-                      --
-                    </div>
-                    <div id="content-deco">/</div>
-                    <div id="total-count">--</div>
-                  </div>
-                  <div
-                    class="sub-text t-section-description-text c-content-tertiary"
-                  >
-                    Available
-                  </div>
-                  <div class="status-bar">
-                    <span class="status-bar"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="info-card c-bg-secondary">
-                <div class="title-sub t-card-title c-content-primary">
-                  2nd Floor
-                </div>
-                <div id="info-2nd" class="info-card-content c-content-primary">
-                  <div class="number c-content-tertiary">
-                    <div
-                      id="available-count"
-                      class="t-display c-content-primary"
-                    >
-                      --
-                    </div>
-                    <div id="content-deco">/</div>
-                    <div id="total-count">--</div>
-                  </div>
-                  <div
-                    class="sub-text t-section-description-text c-content-tertiary"
-                  >
-                    Available
-                  </div>
-                  <div class="status-bar">
-                    <span class="status-bar"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="equip-info">
+          <div id="public-computers-information">
             <div class="card-text-content">
               <div class="card-title t-section-title c-content-primary">
-                Borrow Laptops, Chargers, etc?
-                <div class="t-section-title-sub">
-                  Visit <strong>TLC Tech Desk</strong> at 2nd Floor
-                </div>
+                Public Computers Available on 1st & 2nd Floor
               </div>
               <div class="card-content c-content-primary">
                 <div class="card-description t-section-title-sub">
-                  List of equipment
+                  Find it on floor maps
                 </div>
                 <div class="card-url t-section-description-text">
-                  go.umd.edu/equipment-mck
+                  go.umd.edu/mck-floorplan
                 </div>
               </div>
             </div>
             <div class="card-qrcode">
               <img
-                src="{{ url_for('displays.static', filename='images/umd-equipment-mck.svg') }}"
+                src="{{ url_for('displays.static', filename='images/umd-floorplan-mck.svg') }}"
                 alt="QR Code"
               />
+            </div>
+          </div>
+          <div id="equip-loan">
+            <div class="card-text-content">
+              <div class="card-title t-section-title c-content-primary">
+                Equipment Loan
+                <div class="t-section-title-sub">
+                  Visit <strong>TLC Tech Desk</strong> at 2nd Floor
+                </div>
+              </div>
+              <div class="card-group">
+                <div id="macbooks" class="info-card c-bg-secondary">
+                  <div class="title-sub t-card-title c-content-primary">
+                    Macbooks
+                  </div>
+                  <div
+                    id="macbooks-info"
+                    class="info-card-content c-content-primary"
+                  >
+                    <div class="number c-content-tertiary">
+                      <div
+                        id="available-count"
+                        class="t-display c-content-primary"
+                      >
+                        --
+                      </div>
+                      <div id="content-deco">/</div>
+                      <div id="total-count">--</div>
+                    </div>
+                    <div
+                      id="available-status"
+                      class="sub-text t-section-description-text c-content-tertiary"
+                    >
+                      --
+                    </div>
+                    <div class="status-bar">
+                      <span class="status-bar"></span>
+                    </div>
+                  </div>
+                </div>
+                <div id="pc-laptops" class="info-card c-bg-secondary">
+                  <div class="title-sub t-card-title c-content-primary">
+                    PC Laptops
+                  </div>
+                  <div
+                    id="pc-laptops-info"
+                    class="info-card-content c-content-primary"
+                  >
+                    <div class="number c-content-tertiary">
+                      <div
+                        id="available-count"
+                        class="t-display c-content-primary"
+                      >
+                        --
+                      </div>
+                      <div id="content-deco">/</div>
+                      <div id="total-count">--</div>
+                    </div>
+                    <div
+                      id="available-status"
+                      class="sub-text t-section-description-text c-content-tertiary"
+                    >
+                      --
+                    </div>
+                    <div class="status-bar">
+                      <span class="status-bar"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-content c-content-primary">
+                <div class="card-description t-section-title-sub">
+                  Chargers, tablets, cameras, and more...
+                </div>
+                <div class="card-url t-section-description-text">
+                  go.umd.edu/equipment-mck
+                </div>
+              </div>
             </div>
           </div>
           <div id="help-info">
