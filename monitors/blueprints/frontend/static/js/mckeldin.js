@@ -6,7 +6,6 @@ const CONFIG = {
   endpoints: {
     hours: "/api/libtools/mckeldin/hours/today",
     rooms: "/api/libtools/mckeldin/availability",
-    computers: "/monitors/api/workstations-mckeldin.json",
     equipment: "/alma-service/equipment",
   },
   equipmentIds: {
@@ -19,7 +18,7 @@ const CONFIG = {
 const DataService = {
   /**
    * Fetch data from API or use mock data in development
-   * @param {string} dataType - Type of data to fetch (hours, rooms, computers)
+   * @param {string} dataType - Type of data to fetch (hours, rooms)
    * @returns {Promise<Object>} - The fetched or mock data
    */
   async fetchData(dataType) {
@@ -290,44 +289,6 @@ const UIService = {
   },
 
   /**
-   * Update library available computers display
-   * @param {Object} data - Library computers data
-   */
-  updateLibraryComputers(data) {
-    if (!data) return;
-
-    // First floor
-    this.updateComputerSection("info-1st", data.MCK1F);
-
-    // Second floor
-    this.updateComputerSection("info-2nd", data.MCK2F);
-  },
-
-  /**
-   * Helper function to update a computer section
-   * @param {string} sectionId - HTML element ID for the section
-   * @param {Object} floorData - Floor data object
-   */
-  updateComputerSection(sectionId, floorData) {
-    const section = document.getElementById(sectionId);
-    const availableEl = section.querySelector("#available-count");
-    const totalEl = section.querySelector("#total-count");
-    const decoEl = section.querySelector("#content-deco");
-    const barEl = section.querySelector("span.status-bar");
-
-    availableEl.innerHTML = floorData.available;
-    totalEl.innerHTML = floorData.total;
-    decoEl.innerHTML = "/";
-
-    // update the availability bar
-    let progressBarValue = (floorData.available / floorData.total) * 100;
-    if (progressBarValue > 100) {
-      progressBarValue = 100;
-    }
-    barEl.style.width = `${progressBarValue}%`;
-  },
-
-  /**
    * Update equipment availability display
    * @param {Object} data - Aggregated equipment data
    */
@@ -429,9 +390,6 @@ const LibraryApp = {
 
     const roomsData = await DataService.fetchData("rooms");
     UIService.updateLibraryRooms(roomsData);
-
-    const computersData = await DataService.fetchData("computers");
-    UIService.updateLibraryComputers(computersData);
 
     const equipmentData = await DataService.fetchEquipmentData();
     UIService.updateEquipmentAvailability(equipmentData);
