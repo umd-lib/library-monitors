@@ -6,7 +6,11 @@ const CONFIG = {
   endpoints: {
     hours: "/api/libtools/mckeldin/hours/today",
     rooms: "/api/libtools/mckeldin/availability",
-    computers: "/monitors/api/workstations-mckeldin.json",
+    equipment: "/alma-service/equipment",
+  },
+  equipmentIds: {
+    mackbooks: ["990060272550108238"],
+    pc_laptops: ["990060266440108238"],
   },
 };
 
@@ -14,7 +18,7 @@ const CONFIG = {
 const DataService = {
   /**
    * Fetch data from API or use mock data in development
-   * @param {string} dataType - Type of data to fetch (hours, rooms, computers)
+   * @param {string} dataType - Type of data to fetch (hours, rooms)
    * @returns {Promise<Object>} - The fetched or mock data
    */
   async fetchData(dataType) {
@@ -41,6 +45,82 @@ const DataService = {
       UIService.showError(`Failed to load ${dataType} data`);
       return null;
     }
+  },
+
+  /**
+   * Fetch equipment data from new API
+   * @returns {Promise<Object>} - Equipment availability data by category
+   */
+  async fetchEquipmentData() {
+    try {
+      // Collect all unique equipment IDs
+      const allEquipmentIds = new Set();
+      Object.values(CONFIG.equipmentIds).forEach((ids) => {
+        ids.forEach((id) => allEquipmentIds.add(id));
+      });
+
+      const response = await fetch(CONFIG.endpoints.equipment, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([...allEquipmentIds]),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const rawData = await response.json();
+      return this.aggregateEquipmentData(rawData);
+    } catch (error) {
+      console.error("Error fetching equipment data:", error);
+      UIService.showError("Failed to load equipment data");
+      return null;
+    }
+  },
+
+  /**
+   * Aggregate equipment counts by category
+   * @param {Object} rawData - Raw API response
+   * @returns {Object} - Aggregated data by category
+   */
+  aggregateEquipmentData(rawData) {
+    const aggregated = {};
+
+    // Initialize categories with zero counts. `status` stays "unavailable"
+    // until a matching holding reports live availability counts.
+    Object.keys(CONFIG.equipmentIds).forEach((category) => {
+      aggregated[category] = { available: 0, total: 0, status: "unavailable" };
+    });
+
+    // Aggregate counts for each category
+    Object.keys(CONFIG.equipmentIds).forEach((category) => {
+      const categoryIds = CONFIG.equipmentIds[category];
+
+      categoryIds.forEach((equipmentId) => {
+        // Find matching entries in raw data (format: "mms_id--location")
+        Object.keys(rawData).forEach((key) => {
+          if (key.startsWith(equipmentId)) {
+            const item = rawData[key];
+
+            if (item.status === "available") {
+              // This holding reports live counts - sum them in.
+              aggregated[category].available += parseInt(item.count) || 0;
+              aggregated[category].total += parseInt(item.total) || 0;
+              aggregated[category].status = "available";
+            } else if (aggregated[category].status !== "available") {
+              // No live counts (e.g. "Check Holding"). Preserve the API status
+              // so the UI can decide what to show, unless an available holding
+              // has already been found for this category.
+              aggregated[category].status = item.status;
+            }
+          }
+        });
+      });
+    });
+
+    return aggregated;
   },
 };
 
@@ -128,13 +208,26 @@ const UIService = {
 
     const libraryHourTitle = document.getElementById("library-status-title");
     const libraryHour = document.getElementById("close-time");
+    const libraryCloseCard = document.getElementById("library-close");
+    const currentTimeCard = document.getElementById("library-current");
 
     if (data.status === "24hours") {
       libraryHourTitle.innerHTML = "Opens";
       libraryHour.innerHTML = "24 hours";
-    } else if (data.status === "closed" || data.status === "open") {
-      libraryHourTitle.innerHTML = "Closes at";
-      libraryHour.innerHTML = Utils.formatTimeString(data.hours_to);
+    } else if (data.status === "open") {
+      if (data.hours_to === "12:00AM") {
+        libraryHourTitle.innerHTML = "Opens";
+        libraryHour.innerHTML = "24 hours";
+      } else {
+        libraryHourTitle.innerHTML = "Closes at";
+        libraryHour.innerHTML = Utils.formatTimeString(data.hours_to);
+      }
+    } else if (data.status === "closed") {
+      libraryHourTitle.innerHTML = "Currently";
+      libraryHour.innerHTML = "CLOSED";
+    } else {
+      libraryCloseCard.style.display = "none"; // Hide the card if status is unknown
+      currentTimeCard.classList.add("full-width"); // Make the current time card full width
     }
     // other status = show original data
   },
@@ -196,41 +289,64 @@ const UIService = {
   },
 
   /**
-   * Update library available computers display
-   * @param {Object} data - Library computers data
+   * Update equipment availability display
+   * @param {Object} data - Aggregated equipment data
    */
-  updateLibraryComputers(data) {
+  updateEquipmentAvailability(data) {
     if (!data) return;
 
-    // First floor
-    this.updateComputerSection("info-1st", data.MCK1F);
+    const equipmentMap = {
+      mackbooks: "macbooks-info",
+      pc_laptops: "pc-laptops-info",
+    };
 
-    // Second floor
-    this.updateComputerSection("info-2nd", data.MCK2F);
-  },
+    // Update each equipment category
+    Object.keys(equipmentMap).forEach((category) => {
+      const containerId = equipmentMap[category];
+      const container = document.getElementById(containerId);
+      const categoryData = data[category];
 
-  /**
-   * Helper function to update a computer section
-   * @param {string} sectionId - HTML element ID for the section
-   * @param {Object} floorData - Floor data object
-   */
-  updateComputerSection(sectionId, floorData) {
-    const section = document.getElementById(sectionId);
-    const availableEl = section.querySelector("#available-count");
-    const totalEl = section.querySelector("#total-count");
-    const decoEl = section.querySelector("#content-deco");
-    const barEl = section.querySelector("span.status-bar");
+      if (!container || !categoryData) return;
 
-    availableEl.innerHTML = floorData.available;
-    totalEl.innerHTML = floorData.total;
-    decoEl.innerHTML = "/";
+      const availableEl = container.querySelector("#available-count");
+      const totalEl = container.querySelector("#total-count");
+      const decoEl = container.querySelector("#content-deco");
+      const statusEl = container.querySelector("#available-status");
+      const barEl = container.querySelector("span.status-bar");
 
-    // update the availability bar
-    let progressBarValue = (floorData.available / floorData.total) * 100;
-    if (progressBarValue > 100) {
-      progressBarValue = 100;
-    }
-    barEl.style.width = `${progressBarValue}%`;
+      if (categoryData.status === "available" && categoryData.total > 0) {
+        // Live counts available - show "available / total" with a status bar.
+        // Restore visibility in case a previous refresh hit the "See Staff"
+        // branch below, which hides these elements.
+        if (availableEl) {
+          availableEl.style.display = "";
+          availableEl.textContent = categoryData.available;
+        }
+        if (totalEl) totalEl.textContent = categoryData.total;
+        if (decoEl) {
+          decoEl.style.display = "";
+          decoEl.textContent = "/";
+        }
+        if (statusEl) statusEl.textContent = "Available";
+
+        if (barEl) {
+          let progressBarValue =
+            (categoryData.available / categoryData.total) * 100;
+          if (progressBarValue > 100) {
+            progressBarValue = 100;
+          }
+          barEl.style.width = `${progressBarValue}%`;
+        }
+      } else {
+        // No live count for this item (e.g. status "Check Holding") - direct
+        // visitors to staff instead of showing numbers.
+        if (availableEl) availableEl.style.display = "none";
+        if (totalEl) totalEl.textContent = "SEE STAFF";
+        if (decoEl) decoEl.style.display = "none";
+        if (statusEl) statusEl.textContent = "";
+        if (barEl) barEl.style.width = "0%";
+      }
+    });
   },
 
   /**
@@ -275,8 +391,8 @@ const LibraryApp = {
     const roomsData = await DataService.fetchData("rooms");
     UIService.updateLibraryRooms(roomsData);
 
-    const computersData = await DataService.fetchData("computers");
-    UIService.updateLibraryComputers(computersData);
+    const equipmentData = await DataService.fetchEquipmentData();
+    UIService.updateEquipmentAvailability(equipmentData);
 
     console.log(`Last updated: ${new Date().toLocaleTimeString()}`);
   },
@@ -310,7 +426,7 @@ const LibraryApp = {
     const timeUntilMidnight = tomorrow.getTime() - now.getTime();
 
     console.log(
-      `Scheduling page reload at midnight (${timeUntilMidnight}ms from now)`
+      `Scheduling page reload at midnight (${timeUntilMidnight}ms from now)`,
     );
 
     // Set timeout to reload at midnight
