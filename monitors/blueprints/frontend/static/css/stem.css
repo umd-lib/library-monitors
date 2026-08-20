@@ -320,6 +320,16 @@ span.status-bar {
   width: auto;
 }
 
+.card-qrcode-footer {
+  height: 85%;
+  width: auto;
+}
+
+.card-qrcode-footer img {
+  height: 90%;
+  width: auto;
+}
+
 #title {
   padding: 0;
 
